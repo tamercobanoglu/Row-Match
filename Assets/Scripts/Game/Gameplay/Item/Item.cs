@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Game.Gameplay.Item {
 	public class Item : MonoBehaviour {
 		public SpriteRenderer SpriteRenderer;
+		public BoxCollider2D BoxCollider2D;
 
 		public int Row;
 		public int Column;
@@ -20,13 +21,16 @@ namespace Game.Gameplay.Item {
 			SpriteRenderer.sprite = sprite;
 			SpriteRenderer.size = Vector2.one * 0.8f;
 
+			BoxCollider2D = itembase.BoxCollider2D;
+
 			Row = row;
 			Column = col;
 			_itemType = itemType;
 		}
 
-		public void ChangeSprite(Sprite sprite) {
+		public void Complete(Sprite sprite) {
 			SpriteRenderer.sprite = sprite;
+			BoxCollider2D.enabled = false;
 		}
 	}
 }

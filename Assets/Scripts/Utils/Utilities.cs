@@ -1,6 +1,6 @@
-﻿using Game.Gameplay.Item;
+﻿using Game.Gameplay.Board;
+using Game.Gameplay.Item;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utils {
@@ -18,7 +18,7 @@ namespace Utils {
             }
         }
 
-        public static void SwapColumnRow(Item a, Item b) {
+        public static void SwapItemData(Item a, Item b) {
             int temp = a.Row;
             a.Row = b.Row;
             b.Row = temp;

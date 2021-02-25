@@ -18,10 +18,12 @@ namespace Game.Gameplay.Board {
 
 		private int _width;
 		private int _height;
+		private Sprite _tickSprite;
 
-		public void Prepare(LevelInfo levelInfo) {
+		public void Prepare(LevelInfo levelInfo, Sprite tickSprite) {
 			_width = levelInfo.GridWidth;
 			_height = levelInfo.GridHeight;
+			_tickSprite = tickSprite;
 
 			BoardRenderer.size = new Vector2(_width + 0.2f, _height + 0.2f);
 
@@ -36,7 +38,7 @@ namespace Game.Gameplay.Board {
 
 			for (int i = 0; i < _height; i++) {
 				var row = new Row();
-				row.Prepare(baseYPos + i, baseXPos);
+				row.Prepare(baseYPos + i, baseXPos, _width, _tickSprite);
 
 				Rows[i] = row;
 			}
@@ -48,7 +50,7 @@ namespace Game.Gameplay.Board {
 		}
 
 		public void SwapAttempt(Item.Item item) {
-			/// if the two shapes are diagonally aligned (different row and column), just return
+			/// if the two items are diagonally aligned (different row and column), just return
 			if (!Utilities.AreVerticalOrHorizontalNeighbors(HitItem,
 				item)) {
 				State = GameState.None;
@@ -61,15 +63,36 @@ namespace Game.Gameplay.Board {
 		}
 
 		private IEnumerator Swap(Item.Item item) {
-
-			Utilities.SwapColumnRow(HitItem, item);
+			Utilities.SwapItemData(HitItem, item);
 
 			/// move the swapped ones
-			HitItem.transform.DOMove(item.transform.position, Constants.AnimationDuration);
-			item.transform.DOMove(HitItem.transform.position, Constants.AnimationDuration);
+			SwitchPositions(HitItem, item);
 			yield return new WaitForSeconds(Constants.AnimationDuration);
 
+			/// check out the needed rows
+			CheckRows(HitItem, item);
+
 			State = GameState.None;
+		}
+
+		private void CheckRows(Item.Item hitItem, Item.Item item) {
+			/// items swapped in the same row
+			if (hitItem.Row == item.Row) {
+				Rows[item.Row].UpdateRowData(hitItem.Column, item.Column);
+				return;
+			}
+
+			/// items swapped in the same column
+			Rows[hitItem.Row].UpdateRowData(hitItem, hitItem.Column);
+			Rows[item.Row].UpdateRowData(item, item.Column);
+		}
+
+		private void SwitchPositions(Item.Item hitItem, Item.Item item) {
+			var hitItemPos = hitItem.transform.position;
+			var itemPos = item.transform.position;
+
+			hitItem.transform.DOMove(itemPos, Constants.AnimationDuration);
+			item.transform.DOMove(hitItemPos, Constants.AnimationDuration);
 		}
 	}
 }

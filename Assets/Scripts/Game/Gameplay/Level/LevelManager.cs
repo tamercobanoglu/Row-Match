@@ -13,7 +13,7 @@ namespace Game.Gameplay.Level {
 
 		void Start() {
 			ItemFactory.Prepare(ItemSkin);
-			GameBoard.Prepare(LevelInfos[LevelNum - 1]);
+			GameBoard.Prepare(LevelInfos[LevelNum - 1], ItemSkin.Tick);
 			PrepareLevel(LevelInfos[LevelNum - 1]);
 		}
 
@@ -29,7 +29,7 @@ namespace Game.Gameplay.Level {
 					var item = ItemFactory.CreateItem(itemType, GameBoard.ItemsParent, i, j);
 					if (item == null) continue;
 
-					row.AddItem(item);
+					row.Items[j] = item;
 					item.transform.position = new Vector3(row.BaseXPos + j, row.YPos, 0);
 				}
 			}
