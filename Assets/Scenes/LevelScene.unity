@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b017f348437ae8443a7d5c0c6c04b45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cam: {fileID: 519420031}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -226,6 +227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 603980007}
+  - component: {fileID: 603980008}
   m_Layer: 0
   m_Name: Settings
   m_TagString: Untagged
@@ -247,6 +249,18 @@ Transform:
   m_Father: {fileID: 934385949}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &603980008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603980006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ee6a62a222bcf9458ba8352bf7904e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &719711196
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 934385949}
   - component: {fileID: 934385950}
+  - component: {fileID: 934385951}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -433,6 +448,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 25622f2ee98c24f46a821ae3127711b3, type: 2}
   - {fileID: 11400000, guid: f7baa1f9acfe2a64c82c2a93d135c834, type: 2}
   - {fileID: 11400000, guid: 773f437f106afa645b36421f69e3cc49, type: 2}
+--- !u!114 &934385951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934385948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04d80001e25b7c041810b3452fd10a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 519420031}
+  GameBoard: {fileID: 1034765219}
 --- !u!1 &1034765217
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,6 +508,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoardRenderer: {fileID: 795055814}
   ItemsParent: {fileID: 719711197}
+  State: 0
+  HitItem: {fileID: 0}
 --- !u!1 &1595478947
 GameObject:
   m_ObjectHideFlags: 0

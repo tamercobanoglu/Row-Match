@@ -26,7 +26,7 @@ namespace Game.Gameplay.Level {
 
 					var itemType = levelInfo.Items[i * levelInfo.GridWidth + j];
 
-					var item = ItemFactory.CreateItem(itemType, GameBoard.ItemsParent);
+					var item = ItemFactory.CreateItem(itemType, GameBoard.ItemsParent, i, j);
 					if (item == null) continue;
 
 					row.AddItem(item);

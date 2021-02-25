@@ -10,7 +10,7 @@ namespace Game.Gameplay.Item {
             _itemSkin = itemSkin;
         }
 
-        public static Item CreateItem(ItemType itemType, Transform parent) {
+        public static Item CreateItem(ItemType itemType, Transform parent, int row, int col) {
             if (_itemBasePrefab == null) {
                 _itemBasePrefab = Resources.Load("ItemBase") as GameObject;
             }
@@ -19,7 +19,7 @@ namespace Game.Gameplay.Item {
                 _itemBasePrefab, Vector3.zero, Quaternion.identity, parent).GetComponent<ItemBase>();
 
             var item = itemBase.gameObject.AddComponent<Item>();
-            item.Prepare(itemType, itemBase, GetSkin(itemType));
+            item.Prepare(itemType, itemBase, GetSkin(itemType), row, col);
 
             return item;
         }

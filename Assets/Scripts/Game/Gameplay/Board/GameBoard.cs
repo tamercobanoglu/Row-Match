@@ -1,7 +1,11 @@
 ﻿using Game.Gameplay.Level;
+using Game.Mechanics;
+using Utils;
+using Settings;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {
@@ -9,6 +13,8 @@ namespace Game.Gameplay.Board {
 		public Transform ItemsParent;
 
 		[HideInInspector] public Row[] Rows = null;
+		[HideInInspector] public GameState State = GameState.None;
+		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
 		private int _height;
@@ -36,7 +42,35 @@ namespace Game.Gameplay.Board {
 			}
 		}
 
+		public void ItemTapped(Item.Item item) {
+			HitItem = item;
+			State = GameState.SelectionStarted;
+		}
 
+		public void SwapAttempt(Item.Item item) {
+			/// if the two shapes are diagonally aligned (different row and column), just return
+			if (!Utilities.AreVerticalOrHorizontalNeighbors(HitItem,
+				item)) {
+				State = GameState.None;
+				return;
+			}
+
+			State = GameState.Animating;
+			Utilities.FixSortingLayer(HitItem.SpriteRenderer, item.SpriteRenderer);
+			StartCoroutine(Swap(item));
+		}
+
+		private IEnumerator Swap(Item.Item item) {
+
+			Utilities.SwapColumnRow(HitItem, item);
+
+			/// move the swapped ones
+			HitItem.transform.DOMove(item.transform.position, Constants.AnimationDuration);
+			item.transform.DOMove(HitItem.transform.position, Constants.AnimationDuration);
+			yield return new WaitForSeconds(Constants.AnimationDuration);
+
+			State = GameState.None;
+		}
 	}
 }
 
