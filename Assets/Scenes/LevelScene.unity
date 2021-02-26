@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b017f348437ae8443a7d5c0c6c04b45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cam: {fileID: 519420031}
+  cam: {fileID: 519420031}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -359,7 +359,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 817663723
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c0f4d9387285fd2448f46205a223b5a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -382,6 +382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 934385949}
   - component: {fileID: 934385950}
+  - component: {fileID: 934385952}
   - component: {fileID: 934385951}
   m_Layer: 0
   m_Name: LevelManager
@@ -404,6 +405,7 @@ Transform:
   - {fileID: 603980007}
   - {fileID: 795055813}
   - {fileID: 1595478948}
+  - {fileID: 1034765218}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -422,32 +424,7 @@ MonoBehaviour:
   LevelNum: 1
   GameBoard: {fileID: 1034765219}
   ItemSkin: {fileID: 11400000, guid: d1042395003dc9a43b39acbf75b95e99, type: 2}
-  LevelInfos:
-  - {fileID: 11400000, guid: 7f73155fa4709d2498d64b2f49fa6756, type: 2}
-  - {fileID: 11400000, guid: 3ed8571b280b5fa4ea544e80a07051df, type: 2}
-  - {fileID: 11400000, guid: 137ce0609e7827e4d89a56cc60b2d63a, type: 2}
-  - {fileID: 11400000, guid: 0bae024c1be178c428e4ed4cccb7e473, type: 2}
-  - {fileID: 11400000, guid: a8ae111413579c4499f58d33aab3bf73, type: 2}
-  - {fileID: 11400000, guid: 36558bfd950efc84cb62ddc1d4d66f1b, type: 2}
-  - {fileID: 11400000, guid: 855270eb83d1e1b4dab4ffdeeac62801, type: 2}
-  - {fileID: 11400000, guid: 431207865ee07dd49866289c08f2725f, type: 2}
-  - {fileID: 11400000, guid: dfb860b509e562e42a8d7787a8eadce8, type: 2}
-  - {fileID: 11400000, guid: 0c008283de3823e45a632d7436f82092, type: 2}
-  - {fileID: 11400000, guid: 73eb3b0cb88645c418f800474afa82e6, type: 2}
-  - {fileID: 11400000, guid: 132ba40c2469e2143aa43e74165b34ce, type: 2}
-  - {fileID: 11400000, guid: b6772bebdcdade840934838fc0457144, type: 2}
-  - {fileID: 11400000, guid: 7a26edd41ab5a3e409d0bbc10ff4a9bf, type: 2}
-  - {fileID: 11400000, guid: 1d786706b274343409b6e8b9b6d70f64, type: 2}
-  - {fileID: 11400000, guid: d592102afe2d9e2429d755b11e64ecdd, type: 2}
-  - {fileID: 11400000, guid: fc5b52e77842bea4caaf868fc6f174a2, type: 2}
-  - {fileID: 11400000, guid: ed20e47f11e88304d8fe8d0f70732da0, type: 2}
-  - {fileID: 11400000, guid: 736d3fca4df317b4fa171e802282ff8b, type: 2}
-  - {fileID: 11400000, guid: 15dc5329d5c08f8408dd6ecff961f6c1, type: 2}
-  - {fileID: 11400000, guid: 1572daf6796fe324fa1acc9f2cd3da47, type: 2}
-  - {fileID: 11400000, guid: 86f79b3a897cbc743a5d4f8353b5734a, type: 2}
-  - {fileID: 11400000, guid: 25622f2ee98c24f46a821ae3127711b3, type: 2}
-  - {fileID: 11400000, guid: f7baa1f9acfe2a64c82c2a93d135c834, type: 2}
-  - {fileID: 11400000, guid: 773f437f106afa645b36421f69e3cc49, type: 2}
+  LevelInfoPack: {fileID: 11400000, guid: 4f16728d21da0214db004e0e7d2e6f63, type: 2}
 --- !u!114 &934385951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,11 +434,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 934385948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04d80001e25b7c041810b3452fd10a99, type: 3}
+  m_Script: {fileID: 11500000, guid: 5760fbfcf47c4f6488567cbb653e99f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 519420031}
   GameBoard: {fileID: 1034765219}
+--- !u!114 &934385952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934385948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47ec3c41db96624cb21bf4e0f475c54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenManager: {fileID: 519420030}
 --- !u!1 &1034765217
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,13 +476,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034765217}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 719711197}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 934385949}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1034765219
 MonoBehaviour:

@@ -1,13 +1,10 @@
 ﻿using Game.Gameplay.Board;
 using Game.Gameplay.Item;
 using Game.Mechanics;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils {
-	public class TouchManager : MonoBehaviour {
-        public Camera Camera;
+namespace Utils.Touch {
+    public class TouchGameplay : TouchManager {
         public GameBoard GameBoard;
 
         private void Update() {
@@ -18,8 +15,7 @@ namespace Utils {
 #endif
         }
 
-        private void GetTouchEditor() {
-
+        protected override void GetTouchEditor() {
             if (GameBoard.State == GameState.None) {
                 if (Input.GetMouseButtonDown(0)) {
                     ExecuteSelect(Input.mousePosition);
@@ -33,9 +29,8 @@ namespace Utils {
             }
         }
 
-        private void GetTouchMobile() {
+        protected override void GetTouchMobile() {
             if (Input.touchCount <= 0) return;
-
             var touch = Input.GetTouch(0);
 
             if (GameBoard.State == GameState.None) {
@@ -51,18 +46,18 @@ namespace Utils {
             }
         }
 
-        private void ExecuteSelect(Vector3 pos) {
-			var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
+        protected override void ExecuteSelect(Vector3 pos) {
+            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
 
             if (hit != null) {
                 GameBoard.ItemTapped(hit.gameObject.GetComponent<Item>());
             }
         }
 
-        private void ExecuteSwipe(Vector3 pos) {
-			var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
+        protected override void ExecuteSwipe(Vector3 pos) {
+            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
 
-			if (hit != null && GameBoard.HitItem.gameObject != hit.gameObject) {
+            if (hit != null && GameBoard.HitItem.gameObject != hit.gameObject) {
                 GameBoard.SwapAttempt(hit.gameObject.GetComponent<Item>());
             }
         }

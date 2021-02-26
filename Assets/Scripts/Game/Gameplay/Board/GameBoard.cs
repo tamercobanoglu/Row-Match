@@ -63,16 +63,24 @@ namespace Game.Gameplay.Board {
 		}
 
 		private IEnumerator Swap(Item.Item item) {
-			Utilities.SwapItemData(HitItem, item);
-
 			/// move the swapped ones
-			SwitchPositions(HitItem, item);
-			yield return new WaitForSeconds(Constants.AnimationDuration);
+			SwapItems(HitItem, item);
+			yield return new WaitForSeconds(Properties.AnimationDuration);
 
 			/// check out the needed rows
 			CheckRows(HitItem, item);
 
 			State = GameState.None;
+		}
+
+		private void SwapItems(Item.Item hitItem, Item.Item item) {
+			Utilities.SwapItemData(hitItem, item);
+
+			var hitItemPos = hitItem.transform.position;
+			var itemPos = item.transform.position;
+
+			hitItem.transform.DOMove(itemPos, Properties.AnimationDuration);
+			item.transform.DOMove(hitItemPos, Properties.AnimationDuration);
 		}
 
 		private void CheckRows(Item.Item hitItem, Item.Item item) {
@@ -85,14 +93,6 @@ namespace Game.Gameplay.Board {
 			/// items swapped in the same column
 			Rows[hitItem.Row].UpdateRowData(hitItem, hitItem.Column);
 			Rows[item.Row].UpdateRowData(item, item.Column);
-		}
-
-		private void SwitchPositions(Item.Item hitItem, Item.Item item) {
-			var hitItemPos = hitItem.transform.position;
-			var itemPos = item.transform.position;
-
-			hitItem.transform.DOMove(itemPos, Constants.AnimationDuration);
-			item.transform.DOMove(hitItemPos, Constants.AnimationDuration);
 		}
 	}
 }

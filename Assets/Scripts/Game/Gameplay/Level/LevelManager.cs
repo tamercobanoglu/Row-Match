@@ -8,13 +8,12 @@ namespace Game.Gameplay.Level {
 		public int LevelNum;
 		public GameBoard GameBoard;
 		public ItemSkin ItemSkin;
-
-		public LevelInfo[] LevelInfos;
+		public LevelInfoPack LevelInfoPack;
 
 		void Start() {
 			ItemFactory.Prepare(ItemSkin);
-			GameBoard.Prepare(LevelInfos[LevelNum - 1], ItemSkin.Tick);
-			PrepareLevel(LevelInfos[LevelNum - 1]);
+			GameBoard.Prepare(LevelInfoPack.Levels[LevelNum - 1], ItemSkin.Tick);
+			PrepareLevel(LevelInfoPack.Levels[LevelNum - 1]);
 		}
 
 		private void PrepareLevel(LevelInfo levelInfo) {

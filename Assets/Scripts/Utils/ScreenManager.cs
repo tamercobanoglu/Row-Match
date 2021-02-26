@@ -2,9 +2,9 @@
 
 namespace Utils {
 	public class ScreenManager : MonoBehaviour {
-		public Camera Cam;
+		public Camera cam;
 
-		void Awake() {
+		public void Initialize() {
 			PrepareCamera();
 		}
 
