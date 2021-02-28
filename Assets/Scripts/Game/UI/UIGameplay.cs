@@ -1,32 +1,29 @@
 ﻿using Game.Gameplay.Level;
 using Game.UI.Gameplay;
 using Settings;
-using Player;
-using Utils;
+using PlayerInfo;
 using System.Collections;
 using UnityEngine;
 using Game.UI.Buttons;
 
 namespace Game.UI {
     public class UIGameplay : UIManager {
+        public ScoreManager ScoreManager;
         public GameplayInfo GameplayInfo;
         public MessagePanel MessagePanel;
-        public LevelManager LevelManager;
-        public ScoreManager ScoreManager;
         public ReturnButton ReturnButton;
-
-        [Header("Level Related")]
+        public LevelManager LevelManager;
         [SerializeField] private int _currentLevel;
-        public LevelInfoPack LevelInfoPack;
 
         protected override void Awake() {
             Initialize();
 
             _currentLevel = Properties.CurrentLevel;
 
-            GameplayInfo.Initialize(_currentLevel, LevelInfoPack.Levels);
+            Player.Initialize(LevelInfoPack.Levels.Length);
+            GameplayInfo.Initialize(Player.Scores, _currentLevel, LevelInfoPack.Levels);
             LevelManager.Initialize(_currentLevel, LevelInfoPack.Levels);
-            ScoreManager.Initialize(LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
+            ScoreManager.Initialize(this, LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
         }
 
         protected override void Initialize() {
@@ -35,7 +32,9 @@ namespace Game.UI {
             Fade(FadeType.In);
         }
 
-        public void EndGame() {
+        public void EndGame(int score) {
+            UpdatePlayer(score);
+
             StartCoroutine(EndingProcess());
         }
 
@@ -49,5 +48,14 @@ namespace Game.UI {
 
             ReturnButton.PopupText();
         }
+
+        private void UpdatePlayer(int score) {
+			if (score > Player.Scores[Properties.CurrentLevel - 1]) {
+                Player.Scores[Properties.CurrentLevel - 1] = score;
+                Player.UnlockedLevels[Properties.CurrentLevel] = true;
+
+                Player.SavePlayer();
+			}
+		}
     }
 }

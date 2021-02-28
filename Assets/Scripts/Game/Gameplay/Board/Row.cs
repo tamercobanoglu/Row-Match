@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Player;
+using PlayerInfo;
 using Settings;
 
 namespace Game.Gameplay.Board {

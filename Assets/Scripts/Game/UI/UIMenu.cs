@@ -1,9 +1,7 @@
-﻿using Game.UI.Buttons;
-using Game.UI.Popup;
+﻿using Game.UI.Popup;
 
 namespace Game.UI {
 	public class UIMenu : UIManager {
-		public LevelsButton LevelsButton;
 		public LevelsPopup LevelsPopup;
 
 		private bool tempAwakeBool = true;
@@ -29,7 +27,8 @@ namespace Game.UI {
 		protected override void Initialize() {
 			Fade(FadeType.In);
 
-			LevelsPopup.Initialize();
+			Player.Initialize(LevelInfoPack.Levels.Length);
+			LevelsPopup.Initialize(this, Player);
 		}
 
 		public void NotFirstLaunch() {

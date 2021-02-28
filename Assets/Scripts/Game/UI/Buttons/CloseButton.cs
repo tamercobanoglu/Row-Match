@@ -6,7 +6,7 @@ namespace Game.UI.Buttons {
         public ButtonType ButtonType { get { return _buttonType; } }
         public bool IsSelected { get { return _isSelected; } }
 
-        private ButtonType _buttonType = ButtonType.Close;
+        private ButtonType _buttonType = ButtonType.CloseButton;
         private bool _isSelected;
 
         public LevelsPopup LevelsPopup;

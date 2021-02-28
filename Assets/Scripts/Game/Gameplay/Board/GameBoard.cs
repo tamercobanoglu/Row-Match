@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Player;
+using PlayerInfo;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {

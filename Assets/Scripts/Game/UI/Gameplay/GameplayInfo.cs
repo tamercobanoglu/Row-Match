@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Player;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
@@ -10,8 +9,8 @@ namespace Game.UI.Gameplay {
         public TextMesh ScoreText;
         public TextMesh MoveCountText;
 
-        public void Initialize(int currentLevel, LevelInfo[] levels) {
-            HighestScoreText.text = PlayerInfo.Scores[currentLevel - 1].ToString();
+        public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
+            HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();
         }
 

@@ -2,12 +2,16 @@
 using Utils;
 using DG.Tweening;
 using Settings;
+using PlayerInfo;
+using Game.Gameplay.Level;
 
 namespace Game.UI {
     public abstract class UIManager : MonoBehaviour {
+        public Player Player;
         public SceneLoader SceneLoader;
         public ScreenManager ScreenManager;
         public SpriteRenderer FadeRenderer;
+        public LevelInfoPack LevelInfoPack;
 
         protected abstract void Awake();
 

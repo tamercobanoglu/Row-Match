@@ -7,7 +7,7 @@ namespace Game.UI.Buttons {
         public ButtonType ButtonType { get { return _buttonType; } }
         public bool IsSelected { get { return _isSelected; } }
 
-        private ButtonType _buttonType = ButtonType.Play;
+        private ButtonType _buttonType = ButtonType.PlayButton;
         private bool _isSelected;
 
         public SpriteRenderer Image;

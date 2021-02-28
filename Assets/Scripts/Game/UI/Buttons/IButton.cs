@@ -13,9 +13,10 @@ namespace Game.UI.Buttons {
 	}
 
 	public enum ButtonType {
-		Levels,
-		Play,
-		Close,
-		Return
+		LevelsButton,
+		LevelsPanel,
+		PlayButton,
+		CloseButton,
+		ReturnButton
 	}
 }

@@ -1,19 +1,15 @@
-﻿using UnityEngine;
-using Utils;
-using DG.Tweening;
-using Settings;
+﻿using Game.UI.Buttons;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Game.UI.Buttons {
-    public class ReturnButton : MonoBehaviour, IButton {
+namespace Game.UI.Popup {
+    public class LevelsPanel : MonoBehaviour, IButton {
         public ButtonType ButtonType { get { return _buttonType; } }
         public bool IsSelected { get { return _isSelected; } }
 
-        private ButtonType _buttonType = ButtonType.ReturnButton;
+        private ButtonType _buttonType = ButtonType.LevelsPanel;
         private bool _isSelected = true;
-
-        public UIManager UIManager;
-        public BoxCollider2D Collider;
-        public Transform TextTransform;
 
         public void Operate(TouchPhase touchPase) {
 
@@ -51,7 +47,7 @@ namespace Game.UI.Buttons {
         public void Released() {
             if (!_isSelected) return;
 
-            UIManager.SceneLoader.LoadScene(SceneType.MainScene);
+            /// animate
 
             _isSelected = false;
         }
@@ -59,11 +55,6 @@ namespace Game.UI.Buttons {
         public void Canceled() {
             _isSelected = false;
         }
-
-        public void PopupText() {
-            Collider.enabled = true;
-            TextTransform.gameObject.SetActive(true);
-            TextTransform.DOScale(Vector3.one, Properties.FadeOutDuration);
-        }
     }
 }
+
