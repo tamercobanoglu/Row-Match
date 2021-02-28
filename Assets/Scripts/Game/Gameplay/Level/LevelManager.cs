@@ -5,15 +5,13 @@ using UnityEngine;
 
 namespace Game.Gameplay.Level {
 	public class LevelManager : MonoBehaviour {
-		public int LevelNum;
 		public GameBoard GameBoard;
 		public ItemSkin ItemSkin;
-		public LevelInfoPack LevelInfoPack;
 
-		void Start() {
+		public void Initialize(int currentLevel, LevelInfo[] levels) {
 			ItemFactory.Prepare(ItemSkin);
-			GameBoard.Prepare(LevelInfoPack.Levels[LevelNum - 1], ItemSkin.Tick);
-			PrepareLevel(LevelInfoPack.Levels[LevelNum - 1]);
+			GameBoard.Prepare(levels[currentLevel - 1], ItemSkin.Tick);
+			PrepareLevel(levels[currentLevel - 1]);
 		}
 
 		private void PrepareLevel(LevelInfo levelInfo) {

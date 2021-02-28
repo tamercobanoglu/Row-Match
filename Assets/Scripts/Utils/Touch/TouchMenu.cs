@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
+using Game.UI.Buttons;
 
 namespace Utils.Touch {
     public class TouchMenu : TouchManager {
+        private const string LevelsButtonTag = "LevelsButton";
+        private const string PlayButtonTag = "PlayButton";
+        private const string CloseButtonTag = "CloseButton";
 
         private void Update() {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -13,15 +17,15 @@ namespace Utils.Touch {
 
         protected override void GetTouchEditor() {
             if (Input.GetMouseButtonDown(0)) {
-                ExecuteSelect(Input.mousePosition);
+                HandleHit(Input.mousePosition, TouchPhase.Began);
             }
 
             if (Input.GetMouseButton(0)) {
-                ExecuteSwipe(Input.mousePosition);
+                HandleHit(Input.mousePosition, TouchPhase.Moved);
             }
 
             if (Input.GetMouseButtonUp(0)) {
-                ExecuteRelease(Input.mousePosition);
+                HandleHit(Input.mousePosition, TouchPhase.Ended);
             }
         }
 
@@ -29,40 +33,28 @@ namespace Utils.Touch {
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
 
-            switch (touch.phase) {
-                case TouchPhase.Began:
-                    ExecuteSelect(touch.position);
-                    break;
-                case TouchPhase.Moved:
-                    ExecuteSwipe(touch.position);
-                    break;
-                case TouchPhase.Ended:
-                    ExecuteRelease(touch.position);
-                    break;
-            }
+            HandleHit(touch.position, touch.phase);
         }
 
-        protected override void ExecuteSelect(Vector3 pos) {
+        private void HandleHit(Vector3 pos, TouchPhase touchPhase) {
             var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
 
             if (hit != null) {
-
+                ExecuteTouch(hit.gameObject, hit.tag, touchPhase);
             }
         }
 
-        protected override void ExecuteSwipe(Vector3 pos) {
-            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
-
-            if (hit != null) {
-
-            }
-        }
-
-        private void ExecuteRelease(Vector3 pos) {
-            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
-
-            if (hit != null) {
-
+        private void ExecuteTouch(GameObject go, string tag, TouchPhase touchPhase) {
+            switch (tag) {
+                case LevelsButtonTag:
+                    go.GetComponent<LevelsButton>().Operate(touchPhase);
+                    break;
+                case PlayButtonTag:
+                    go.GetComponent<PlayButton>().Operate(touchPhase);
+                    break;
+                case CloseButtonTag:
+                    go.GetComponent<CloseButton>().Operate(touchPhase);
+                    break;
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Player;
+using Settings;
 
 namespace Game.Gameplay.Board {
 	public class Row {
@@ -9,6 +11,7 @@ namespace Game.Gameplay.Board {
 
 		public Item.Item[] Items = null;
 
+		private bool _isDisabled;
 		private float _yPos;
 		private float _baseXPos;
 		private Sprite _tickSprite;
@@ -29,12 +32,12 @@ namespace Game.Gameplay.Board {
 		}
 
 		/// for vertically swapped ones
-		public void UpdateRowData(Item.Item item, int col) {
-			Items[col] = item;
+		public void UpdateRowData(Item.Item item, ScoreManager sm) {
+			Items[item.Column] = item;
 
 			if (!IsCompleted()) return;
 
-			RowMatch();
+			RowMatch(sm);
 		}
 
 		private bool IsCompleted() {
@@ -46,9 +49,20 @@ namespace Game.Gameplay.Board {
 			return true;
 		}
 
-		private void RowMatch() {
+		private void RowMatch(ScoreManager sm) {
 			for (int i = 0; i < Items.Length; i++) {
 				Items[i].Complete(_tickSprite);
+			}
+
+			_isDisabled = true;
+			sm.UpdateScore(Properties.PointsArray[(int)Items[0].ItemType - 1] * Items.Length);
+		}
+
+		public void Disable() {
+			if (_isDisabled) return;
+
+			for (int i = 0; i < Items.Length; i++) {
+				Items[i].BoxCollider2D.enabled = false;
 			}
 		}
 	}

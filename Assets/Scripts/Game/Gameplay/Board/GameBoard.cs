@@ -6,9 +6,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Player;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {
+		public ScoreManager ScoreManager;
 		public SpriteRenderer BoardRenderer;
 		public Transform ItemsParent;
 
@@ -65,10 +67,13 @@ namespace Game.Gameplay.Board {
 		private IEnumerator Swap(Item.Item item) {
 			/// move the swapped ones
 			SwapItems(HitItem, item);
-			yield return new WaitForSeconds(Properties.AnimationDuration);
+			yield return new WaitForSeconds(Properties.ItemSwapDuration);
 
 			/// check out the needed rows
 			CheckRows(HitItem, item);
+
+			/// check move count
+			ScoreManager.MoveSpent();
 
 			State = GameState.None;
 		}
@@ -79,8 +84,8 @@ namespace Game.Gameplay.Board {
 			var hitItemPos = hitItem.transform.position;
 			var itemPos = item.transform.position;
 
-			hitItem.transform.DOMove(itemPos, Properties.AnimationDuration);
-			item.transform.DOMove(hitItemPos, Properties.AnimationDuration);
+			hitItem.transform.DOMove(itemPos, Properties.ItemSwapDuration);
+			item.transform.DOMove(hitItemPos, Properties.ItemSwapDuration);
 		}
 
 		private void CheckRows(Item.Item hitItem, Item.Item item) {
@@ -91,8 +96,19 @@ namespace Game.Gameplay.Board {
 			}
 
 			/// items swapped in the same column
-			Rows[hitItem.Row].UpdateRowData(hitItem, hitItem.Column);
-			Rows[item.Row].UpdateRowData(item, item.Column);
+			Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager);
+			Rows[item.Row].UpdateRowData(item, ScoreManager);
+		}
+
+		private void DisableRows() {
+			for (int i = 0; i < Rows.Length; i++) {
+				Rows[i].Disable();
+			}
+		}
+
+		public void EndGame() {
+			State = GameState.Ended;
+			DisableRows();
 		}
 	}
 }

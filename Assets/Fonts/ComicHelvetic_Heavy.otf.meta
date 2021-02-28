@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 948b73ec084486a4da80d3b1ab5ee7e9
+guid: 5f1378da4acc16c4e8003565c7e75412
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Hey Comic
+  fontName: Comic Helvetic
   fontNames:
-  - Hey Comic
+  - Comic Helvetic
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

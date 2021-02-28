@@ -10,11 +10,11 @@ namespace Game.UI.Popup {
 		public TextMesh ScoreInfoText;
 		public PlayButton PlayButton;
 
-		public void Prepare(LevelInfo levelInfo, bool[] unlockedLevels, int[] scores) {
+		public void Prepare(UIManager uiManager, LevelInfo levelInfo, bool[] unlockedLevels, int[] scores) {
 			LevelInfoText.text = $"Level {levelInfo.LevelNum} - {levelInfo.MoveCount} Moves";
 			ScoreInfoText.text = SetScoreInfoText(levelInfo.LevelNum - 1, unlockedLevels, scores);
 
-			PlayButton.Prepare(unlockedLevels[levelInfo.LevelNum - 1]);
+			PlayButton.Prepare(uiManager, levelInfo.LevelNum, unlockedLevels[levelInfo.LevelNum - 1]);
 		}
 
 		private string SetScoreInfoText(int levelIndex, bool[] unlockedLevels, int[] scores) {

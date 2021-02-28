@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Game.UI.Buttons;
+﻿using Game.UI.Buttons;
 using Game.UI.Popup;
 
 namespace Game.UI {
@@ -27,7 +26,9 @@ namespace Game.UI {
 
 		}
 
-		public override void Initialize() {
+		protected override void Initialize() {
+			Fade(FadeType.In);
+
 			LevelsPopup.Initialize();
 		}
 
