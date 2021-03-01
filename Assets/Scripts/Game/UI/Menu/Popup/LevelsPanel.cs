@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.UI.Popup {
+namespace Game.UI.Menu.Popup {
 	public class LevelsPanel : MonoBehaviour, IButton {
 		public ButtonType ButtonType { get { return _buttonType; } }
 		public bool IsSelected { get { return _isSelected; } }

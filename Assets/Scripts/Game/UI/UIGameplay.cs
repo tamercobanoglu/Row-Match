@@ -54,8 +54,13 @@ namespace Game.UI {
                 Player.Scores[Properties.CurrentLevel - 1] = score;
                 Player.UnlockedLevels[Properties.CurrentLevel] = true;
 
+                Properties.HighestScoreAchieved = true;
+
                 Player.SavePlayer();
+                return;
 			}
-		}
+
+            Properties.HighestScoreAchieved = false;
+        }
     }
 }

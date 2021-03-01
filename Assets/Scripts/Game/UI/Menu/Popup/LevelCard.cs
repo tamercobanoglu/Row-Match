@@ -2,12 +2,13 @@
 using Game.UI.Buttons;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-namespace Game.UI.Popup {
+namespace Game.UI.Menu.Popup {
 	public class LevelCard : MonoBehaviour {
-		public TextMesh LevelInfoText;
-		public TextMesh ScoreInfoText;
+		public TextMeshPro LevelInfoText;
+		public TextMeshPro ScoreInfoText;
 		public PlayButton PlayButton;
 
 		public void Prepare(UIManager uiManager, LevelInfo levelInfo, bool[] unlockedLevels, int[] scores) {

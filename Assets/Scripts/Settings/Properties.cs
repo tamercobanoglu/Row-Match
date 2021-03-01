@@ -14,7 +14,12 @@ namespace Settings {
         public static readonly Color32 UnlockedLevelColor = new Color32(109, 168, 80, 255);
         public static readonly Color32 LockedLevelColor = new Color32(140, 140, 140, 255);
 
+        public static readonly int FirstInstallAvailableLevels = 10;
+
+
+        /// [CLEAN] communication between scenes
         public static int CurrentLevel = 1;
+        public static bool HighestScoreAchieved;
     }
 }
 

@@ -15,7 +15,7 @@ namespace Game.Gameplay.Board {
 		public Transform ItemsParent;
 
 		[HideInInspector] public Row[] Rows = null;
-		[HideInInspector] public GameState State = GameState.None;
+		[HideInInspector] public GameState State;
 		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
@@ -23,6 +23,8 @@ namespace Game.Gameplay.Board {
 		private Sprite _tickSprite;
 
 		public void Prepare(LevelInfo levelInfo, Sprite tickSprite) {
+			State = GameState.None;
+
 			_width = levelInfo.GridWidth;
 			_height = levelInfo.GridHeight;
 			_tickSprite = tickSprite;

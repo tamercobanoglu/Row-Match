@@ -1,6 +1,7 @@
 ﻿using Settings;
 using UnityEngine;
 using Utils;
+using DG.Tweening;
 
 namespace Game.UI.Buttons {
 	public class PlayButton : MonoBehaviour, IButton {
@@ -15,11 +16,14 @@ namespace Game.UI.Buttons {
         public MeshRenderer Text;
         public BoxCollider2D BoxCollider2D;
 
+        [HideInInspector] public float AnimDuration;
         [SerializeField] private int _levelNum;
 
         private UIManager _uiManager;
 
         public void Prepare(UIManager uiManager, int levelNum, bool isUnlocked) {
+            AnimDuration = 3.75f;
+
             _levelNum = levelNum;
             _uiManager = uiManager;
 
@@ -35,8 +39,27 @@ namespace Game.UI.Buttons {
             BoxCollider2D.enabled = true;
         }
 
+        public void LockTemp() {
+            Image.color = Properties.LockedLevelColor;
+            Icon.enabled = true;
+            Text.enabled = false;
+            BoxCollider2D.enabled = false;
+        }
+
         public void AnimateUnlocking() {
-            Unlock(); // temp
+            Text.transform.localScale = Vector3.one * 0.01f;
+            Text.enabled = true;
+
+            var seq = DOTween.Sequence();
+            seq.Append(Icon.transform.DOScale(Vector3.one * 3f, 2f))
+                .Append(Icon.transform.DOScale(Vector3.one * 0.01f, 0.5f))
+                .Append(Text.transform.DOScale(Vector3.one, 0.25f))
+                .Append(Image.DOColor(Properties.UnlockedLevelColor, 1f));
+        }
+
+        public void Activate() {
+            Icon.enabled = false;
+            BoxCollider2D.enabled = true;
         }
 
         public void Operate(Vector3 pos, TouchPhase touchPase) {

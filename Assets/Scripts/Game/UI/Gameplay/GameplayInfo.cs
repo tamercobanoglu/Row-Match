@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
-        public TextMesh HighestScoreText;
-        public TextMesh ScoreText;
-        public TextMesh MoveCountText;
+        public TextMeshPro HighestScoreText;
+        public TextMeshPro ScoreText;
+        public TextMeshPro MoveCountText;
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
             HighestScoreText.text = scores[currentLevel - 1].ToString();

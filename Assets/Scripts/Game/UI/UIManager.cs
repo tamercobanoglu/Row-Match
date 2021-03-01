@@ -24,6 +24,10 @@ namespace Game.UI {
         }
 
         public void Fade(FadeType fade) {
+            var color = FadeRenderer.color;
+            color.a = fade == FadeType.In ? 1f : 0f;
+            FadeRenderer.color = color;
+
             FadeRenderer.enabled = true;
             FadeRenderer.DOFade((float)fade, Properties.FadeOutDuration);
         }

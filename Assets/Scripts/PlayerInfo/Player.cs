@@ -9,15 +9,20 @@ namespace PlayerInfo {
 
 		private int _levelCount;
 
-		public void Initialize(int levelCount) {
+		public bool Initialize(int levelCount) {
 			_levelCount = levelCount;
 
-			if (!LoadPlayer()) CreatePlayer();
+			if (!LoadPlayer()) {
+				CreatePlayer();
+				return true;
+			}
+
+			return false;
 		}
 
 		public void SavePlayer() {
 			SaveSystem.SavePlayer(this);
-			Debug.Log("Player saved!");
+			///Debug.Log("Player saved!");
 		}
 
 		private bool LoadPlayer() {
@@ -27,7 +32,7 @@ namespace PlayerInfo {
 				UnlockedLevels = data.UnlockedLevels;
 				Scores = data.Scores;
 
-				Debug.Log("Player loaded!");
+				///Debug.Log("Player loaded!");
 
 				return true;
 			}
@@ -49,7 +54,7 @@ namespace PlayerInfo {
 				Scores[i] = 0;
 			}
 
-			Debug.Log("Player created!");
+			///Debug.Log("Player created!");
 
 			SavePlayer();
 		}

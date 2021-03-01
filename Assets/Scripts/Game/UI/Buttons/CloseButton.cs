@@ -1,4 +1,4 @@
-﻿using Game.UI.Popup;
+﻿using Game.UI.Menu.Popup;
 using UnityEngine;
 
 namespace Game.UI.Buttons {

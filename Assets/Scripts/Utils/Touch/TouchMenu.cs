@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using Game.UI;
+using Game.Mechanics;
 using Game.UI.Buttons;
-using Game.UI.Popup;
+using Game.UI.Menu.Popup;
 
 namespace Utils.Touch {
 	public class TouchMenu : TouchManager {
@@ -8,6 +10,8 @@ namespace Utils.Touch {
 		private const string PlayButtonTag = "PlayButton";
 		private const string CloseButtonTag = "CloseButton";
 		private const string LevelsPanelTag = "LevelsPanel";
+
+		public UIMenu UIManager;
 
 		private void Update() {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -18,6 +22,8 @@ namespace Utils.Touch {
 		}
 
 		protected override void GetTouchEditor() {
+			if (UIManager.State == MenuState.Animating) return;
+
 			if (Input.GetMouseButtonDown(0)) {
 				HandleHit(Input.mousePosition, TouchPhase.Began);
 			}
@@ -32,6 +38,7 @@ namespace Utils.Touch {
 		}
 
 		protected override void GetTouchMobile() {
+			if (UIManager.State == MenuState.Animating) return;
 			if (Input.touchCount <= 0) return;
 			var touch = Input.GetTouch(0);
 
