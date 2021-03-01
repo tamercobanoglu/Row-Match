@@ -100,7 +100,7 @@ namespace Game.Gameplay.Board {
 			Rows[item.Row].UpdateRowData(item, ScoreManager);
 		}
 
-		private void DisableRows() {
+		public void DisableRows() {
 			for (int i = 0; i < Rows.Length; i++) {
 				Rows[i].Disable();
 			}
@@ -108,7 +108,6 @@ namespace Game.Gameplay.Board {
 
 		public void EndGame() {
 			State = GameState.Ended;
-			DisableRows();
 		}
 	}
 }

@@ -1,15 +1,16 @@
-﻿
+﻿using UnityEngine;
+
 namespace Game.UI.Buttons {
 	public interface IButton {
 		ButtonType ButtonType { get; }
 		bool IsSelected { get; }
 
-		void Operate(UnityEngine.TouchPhase touchPase);
-		void Selected();
-		void Moved();
-		void Stationary();
-		void Released();
-		void Canceled();
+		void Operate(Vector3 pos, TouchPhase touchPase);
+		void Selected(Vector3 pos);
+		void Moved(Vector3 pos);
+		void Stationary(Vector3 pos);
+		void Released(Vector3 pos);
+		void Canceled(Vector3 pos);
 	}
 
 	public enum ButtonType {

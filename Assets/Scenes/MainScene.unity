@@ -541,7 +541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &474810832
 Transform:
   m_ObjectHideFlags: 0
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbcf916ae41efac4397ab9f55fd09ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelsParent: {fileID: 51937323}
+  LevelsPanel: {fileID: 753731807}
   LevelCardPrefab: {fileID: 3567550956238769351, guid: bd7a1ad1a35694c4ca9ce0162e30aedc,
     type: 3}
 --- !u!1 &519420028
@@ -837,7 +837,7 @@ GameObject:
   - component: {fileID: 753731808}
   m_Layer: 0
   m_Name: Levels Panel
-  m_TagString: Untagged
+  m_TagString: LevelsPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -872,6 +872,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721034fa1d4ab55439c35d7e79f9faed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LevelsParent: {fileID: 51937323}
+  _acc: 1
+  _maxSpeed: 50
 --- !u!61 &753731808
 BoxCollider2D:
   m_ObjectHideFlags: 0

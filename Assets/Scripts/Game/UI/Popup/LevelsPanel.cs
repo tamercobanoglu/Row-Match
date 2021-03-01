@@ -4,57 +4,180 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.UI.Popup {
-    public class LevelsPanel : MonoBehaviour, IButton {
-        public ButtonType ButtonType { get { return _buttonType; } }
-        public bool IsSelected { get { return _isSelected; } }
+	public class LevelsPanel : MonoBehaviour, IButton {
+		public ButtonType ButtonType { get { return _buttonType; } }
+		public bool IsSelected { get { return _isSelected; } }
 
-        private ButtonType _buttonType = ButtonType.LevelsPanel;
-        private bool _isSelected = true;
+		private ButtonType _buttonType = ButtonType.LevelsPanel;
+		private bool _isSelected = true;
 
-        public void Operate(TouchPhase touchPase) {
+		public Transform LevelsParent;
+		private Coroutine _scrollCoroutine, _returnCoroutine;
+		private Vector3 _pos;
+		private float _offsetY, _basePosY, _topPosY, _instantPosY, _time;
 
-            switch (touchPase) {
-                case TouchPhase.Began:
-                    Selected();
-                    break;
-                case TouchPhase.Moved:
-                    Moved();
-                    break;
-                case TouchPhase.Stationary:
-                    Stationary();
-                    break;
-                case TouchPhase.Ended:
-                    Released();
-                    break;
-                case TouchPhase.Canceled:
-                    Canceled();
-                    break;
-            }
-        }
+		[SerializeField] private float _acc = 1f;
+		[SerializeField] private float _maxSpeed = 50f;
 
-        public void Selected() {
-            _isSelected = true;
-        }
+		public void Prepare(int levelCount) {
+			_basePosY = 3.5f;
+			_topPosY = CalculateTopYPos(levelCount);
+		}
 
-        public void Moved() {
+		public void Operate(Vector3 pos, TouchPhase touchPase) {
 
-        }
+			switch (touchPase) {
+				case TouchPhase.Began:
+					Selected(pos);
+					break;
+				case TouchPhase.Moved:
+					Moved(pos);
+					break;
+				case TouchPhase.Stationary:
+					Stationary(pos);
+					break;
+				case TouchPhase.Ended:
+					Released(pos);
+					break;
+				case TouchPhase.Canceled:
+					Canceled(pos);
+					break;
+			}
+		}
 
-        public void Stationary() {
+		public void Selected(Vector3 pos) {
+			_isSelected = true;
 
-        }
+			StopAllCoroutines();
+			_instantPosY = pos.y;
+			_offsetY = LevelsParent.position.y - pos.y;
+		}
 
-        public void Released() {
-            if (!_isSelected) return;
+		public void Moved(Vector3 pos) {
+			if (!_isSelected) return;
 
-            /// animate
+			if (_pos == pos) {
+				_time = 0;
+				return;
+			}
 
-            _isSelected = false;
-        }
+			LevelsParent.position = new Vector3(
+				LevelsParent.position.x, 
+				pos.y + _offsetY, 
+				LevelsParent.position.z);
 
-        public void Canceled() {
-            _isSelected = false;
-        }
-    }
+			_pos = pos;
+			_time += Time.deltaTime;
+		}
+
+		public void Stationary(Vector3 pos) {
+
+		}
+
+		public void Released(Vector3 pos) {
+			if (!_isSelected) return;
+
+			/// sliding process
+			if (_time != 0) {
+				_scrollCoroutine = StartCoroutine(Slide((pos.y - _instantPosY) / _time));
+			}
+			else if(_time == 0 && OutOfBounds()) {
+				_returnCoroutine = StartCoroutine(Return(pos.y - _instantPosY > 0 ? LimitPosType.Top : LimitPosType.Base));
+			}
+
+			_time = 0;
+			_isSelected = false;
+		}
+
+		public void Canceled(Vector3 pos) {
+			Released(pos);
+
+			_isSelected = false;
+		}
+
+		IEnumerator Slide(float vel) {
+			vel = LimitVelocity(vel);
+
+			while (Mathf.Abs(vel) > _acc) {
+				if (vel > 0) vel -= _acc;
+				else vel += _acc;
+
+				var pos = LevelsParent.position;
+				pos.y += vel * Time.deltaTime;
+
+				if (OutOfBounds(vel, pos.y)) {
+					pos.y = vel > 0 ? _topPosY : _basePosY;
+					vel = 0f;
+				}
+
+				LevelsParent.position = pos;
+
+				yield return new WaitForSeconds(Time.deltaTime);
+			}
+		}
+
+		IEnumerator Return(LimitPosType lpt) {
+			bool isReached = false;
+			var vel = _maxSpeed * (int)lpt;
+
+			while (!isReached) {
+				var pos = LevelsParent.position;
+				pos.y += vel * Time.deltaTime;
+
+				if (IsReturned(vel, pos.y)) {
+					isReached = true;
+					pos.y = vel < 0 ? _topPosY : _basePosY;
+					vel = 0f;
+				}
+
+				LevelsParent.position = pos;
+				yield return new WaitForSeconds(Time.deltaTime);
+			}
+		}
+
+		#region Calculations
+		private float CalculateTopYPos(int levelCount) {
+			var levelCardImgHeight = 1.8f;
+			var levelCardGap = 0.45f;
+			var halfOfPanelHeight = 6.5f;
+			/// parent go transform eliminates that gap
+			/// var bottomGap = 0.5f;
+
+			var extendedPanelHeight = levelCount * levelCardImgHeight + (levelCount - 1) * levelCardGap;
+			var distance = extendedPanelHeight - (levelCardImgHeight / 2 + _basePosY + halfOfPanelHeight);
+
+			return _basePosY + distance;
+		}
+
+		private float LimitVelocity(float vel) {
+			return Mathf.Abs(vel) >= _maxSpeed ?
+				vel >= 0 ? _maxSpeed : -_maxSpeed : vel;
+		}
+
+		private bool OutOfBounds(float vel, float posY) {
+			return vel > 0 ? posY >= _topPosY : posY <= _basePosY;
+		}
+
+		private bool OutOfBounds() {
+			return LevelsParent.position.y < _basePosY || LevelsParent.position.y > _topPosY;
+		}
+
+		private bool IsReturned(float vel, float posY) {
+			return vel < 0 ? posY <= _topPosY : posY >= _basePosY;
+		}
+		#endregion
+
+		public void ResetPanelPos() {
+			LevelsParent.position = new Vector3(
+				LevelsParent.position.x,
+				_basePosY,
+				LevelsParent.position.z);
+		}
+	}
+
+	public enum LimitPosType { 
+		Base = 1,
+		Top = -1
+	}
 }
 

@@ -78,10 +78,11 @@ namespace Utils.Touch {
         }
 
         private void ExecuteTouch(Vector3 pos) {
-            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
+            var worldPoint = Camera.ScreenToWorldPoint(pos);
+            var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
             if (hit != null && hit.CompareTag(ReturnButtonTag)) {
-                hit.gameObject.GetComponent<ReturnButton>().Operate(TouchPhase.Ended);
+                hit.gameObject.GetComponent<ReturnButton>().Operate(worldPoint, TouchPhase.Ended);
             }
         }
     }

@@ -39,11 +39,11 @@ namespace Game.UI {
         }
 
         IEnumerator EndingProcess() {
+            LevelManager.GameBoard.DisableRows();
             yield return new WaitForSeconds(0.3f);
 
             LevelManager.GameBoard.EndGame();
             MessagePanel.Display();
-
             yield return new WaitForSeconds(1.6f);
 
             ReturnButton.PopupText();

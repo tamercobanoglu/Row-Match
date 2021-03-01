@@ -1,5 +1,4 @@
-﻿using Game.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ namespace PlayerInfo {
 			Debug.Log("Player saved!");
 		}
 
-		public bool LoadPlayer() {
+		private bool LoadPlayer() {
 			PlayerData data = SaveSystem.LoadPlayer();
 
 			if (data != null) {

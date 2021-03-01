@@ -10,40 +10,40 @@ namespace Game.UI.Buttons {
 
         public UIMenu UIManager;
 
-        public void Operate(TouchPhase touchPase) {
+        public void Operate(Vector3 pos, TouchPhase touchPase) {
 
             switch (touchPase) {
                 case TouchPhase.Began:
-                    Selected();
+                    Selected(pos);
                     break;
                 case TouchPhase.Moved:
-                    Moved();
+                    Moved(pos);
                     break;
                 case TouchPhase.Stationary:
-                    Stationary();
+                    Stationary(pos);
                     break;
                 case TouchPhase.Ended:
-                    Released();
+                    Released(pos);
                     break;
                 case TouchPhase.Canceled:
-                    Canceled();
+                    Canceled(pos);
                     break;
             }
         }
 
-        public void Selected() {
+        public void Selected(Vector3 pos) {
             _isSelected = true;
         }
 
-        public void Moved() {
+        public void Moved(Vector3 pos) {
 
         }
 
-        public void Stationary() {
+        public void Stationary(Vector3 pos) {
 
         }
 
-        public void Released() {
+        public void Released(Vector3 pos) {
             if (!_isSelected) return;
 
             UIManager.LevelsPopup.Popup();
@@ -51,7 +51,7 @@ namespace Game.UI.Buttons {
             _isSelected = false;
         }
 
-        public void Canceled() {
+        public void Canceled(Vector3 pos) {
             _isSelected = false;
         }
     }
