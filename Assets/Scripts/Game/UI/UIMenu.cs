@@ -1,5 +1,6 @@
 ﻿using Game.UI.Menu;
 using Game.Mechanics;
+using Game.UI.Buttons;
 using Game.UI.Menu.Popup;
 using UnityEngine;
 using Settings;
@@ -7,7 +8,7 @@ using System.Collections;
 
 namespace Game.UI {
 	public class UIMenu : UIManager {
-		public GameObject LevelsButton;
+		public LevelsButton LevelsButton;
 		public LevelsPopup LevelsPopup;
 		public CelebrationPanel CelebrationPanel;
 		[HideInInspector] public MenuState State;
@@ -42,8 +43,6 @@ namespace Game.UI {
 		}
 
 		private void FirstInstall() {
-			///Debug.Log("First install!");
-
 			_firstInstall = false;
 			_firstSceneLoading = false;
 			AvailableLevels = Properties.FirstInstallAvailableLevels;
@@ -52,23 +51,19 @@ namespace Game.UI {
 		}
 
 		private void FirstSceneLoading() {
-			///Debug.Log("First scene loading!");
-
 			_firstSceneLoading = false;
 
 			Initialize();
 		}
 
 		private void Load() {
-			///Debug.Log("Scene loaded!");
-
 			StartCoroutine(LoadingProcess());
 		}
 
 		IEnumerator LoadingProcess() {
 			State = MenuState.Animating;
 			Initialize();
-			LevelsButton.SetActive(false);
+			LevelsButton.gameObject.SetActive(false);
 
 			Fade(FadeType.In);
 			yield return new WaitForSeconds(Properties.FadeOutDuration);
@@ -76,12 +71,17 @@ namespace Game.UI {
 			if (!Properties.HighestScoreAchieved) {
 				LevelsPopup.Popup();
 				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
+				LevelsPopup.LevelsPanel.SelfSlide(Properties.CurrentLevel - 1);
+				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
 			}
 
 			else {
-				/// lock the play button of new level temporarily
-				var playButton = LevelsPopup.LevelCards[Properties.CurrentLevel].PlayButton;
-				playButton.LockTemp();
+				PlayButton playButton = null;
+
+				/// do not try to animate next play button if it does not exist
+				if (Properties.CurrentLevel != AvailableLevels) {
+					playButton = LevelsPopup.LevelCards[Properties.CurrentLevel].PlayButton;
+				}
 
 				CelebrationPanel.Prepare(Player.Scores[Properties.CurrentLevel - 1]);
 				CelebrationPanel.Animate();
@@ -91,15 +91,24 @@ namespace Game.UI {
 				yield return new WaitForSeconds(CelebrationPanel.DisappearingDuration);
 				CelebrationPanel.Deactivate();
 
+				/// lock the play button of new level temporarily
+				if (playButton != null && !Properties.OldLevelRecord) 
+					playButton.LockTemp();
+
 				LevelsPopup.Popup();
 				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
+				LevelsPopup.LevelsPanel.SelfSlide(Properties.CurrentLevel - 1);
+				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
 
-				playButton.AnimateUnlocking();
-				yield return new WaitForSeconds(playButton.AnimDuration);
-				playButton.Activate();
+				/// animate unlocking if it's locked
+				if (playButton != null && !Properties.OldLevelRecord) {
+					playButton.AnimateUnlocking();
+					yield return new WaitForSeconds(playButton.AnimDuration);
+					playButton.Activate();
+				}
 			}
 
-			LevelsButton.SetActive(true);
+			LevelsButton.gameObject.SetActive(true);
 			State = MenuState.None;
 		}
 

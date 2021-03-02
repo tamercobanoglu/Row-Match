@@ -51,11 +51,17 @@ namespace Game.UI {
 
         private void UpdatePlayer(int score) {
 			if (score > Player.Scores[Properties.CurrentLevel - 1]) {
+                if (Player.UnlockedLevels[Properties.CurrentLevel]) {
+                    Properties.OldLevelRecord = true;
+                }
+
+                else {
+                    Properties.OldLevelRecord = false;
+                    Player.UnlockedLevels[Properties.CurrentLevel] = true;
+                }
+                
                 Player.Scores[Properties.CurrentLevel - 1] = score;
-                Player.UnlockedLevels[Properties.CurrentLevel] = true;
-
                 Properties.HighestScoreAchieved = true;
-
                 Player.SavePlayer();
                 return;
 			}

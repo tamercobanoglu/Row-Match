@@ -45,6 +45,10 @@ namespace Game.UI.Menu.Popup {
 		}
 
 		public void Disappear() {
+			/// [CLEAN]
+			_uiManager.LevelsButton.Image.color = Settings.Properties.ButtonColor;
+			_uiManager.LevelsButton.Image.transform.localScale = Vector3.one;
+
 			Transform.DOScale(Vector3.one * 0.8f, AnimDuration);
 			gameObject.SetActive(false);
 

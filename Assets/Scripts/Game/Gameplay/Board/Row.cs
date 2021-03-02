@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerInfo;
 using Settings;
+using DG.Tweening;
 
 namespace Game.Gameplay.Board {
 	public class Row {
@@ -10,16 +11,21 @@ namespace Game.Gameplay.Board {
 		public float BaseXPos { get { return _baseXPos; } }
 
 		public Item.Item[] Items = null;
+		public float RowMatchDuration;
 
 		private bool _isDisabled;
 		private float _yPos;
 		private float _baseXPos;
-		private Sprite _tickSprite;
+		private Sprite _matchSprite;
+		private float _itemMatchDuration;
 
-		public void Prepare(float yPos, float baseXPos, int gridWidth, Sprite tickSprite) {
+		public void Prepare(float yPos, float baseXPos, int gridWidth, Sprite matchSprite) {
+			_itemMatchDuration = 0.1f;
+			RowMatchDuration = gridWidth * _itemMatchDuration;
+
 			_yPos = yPos;
 			_baseXPos = baseXPos;
-			_tickSprite = tickSprite;
+			_matchSprite = matchSprite;
 
 			Items = new Item.Item[gridWidth];
 		}
@@ -32,12 +38,14 @@ namespace Game.Gameplay.Board {
 		}
 
 		/// for vertically swapped ones
-		public void UpdateRowData(Item.Item item, ScoreManager sm) {
+		public bool UpdateRowData(Item.Item item, ScoreManager sm) {
 			Items[item.Column] = item;
 
-			if (!IsCompleted()) return;
-
+			if (!IsCompleted()) 
+				return false;
+			
 			RowMatch(sm);
+			return true;
 		}
 
 		private bool IsCompleted() {
@@ -50,12 +58,9 @@ namespace Game.Gameplay.Board {
 		}
 
 		private void RowMatch(ScoreManager sm) {
-			for (int i = 0; i < Items.Length; i++) {
-				Items[i].Complete(_tickSprite);
-			}
-
 			_isDisabled = true;
-			sm.UpdateScore(Properties.PointsArray[(int)Items[0].ItemType - 1] * Items.Length);
+
+			sm.RowMatch(Items, Properties.PointsArray[(int)Items[0].ItemType - 1], _itemMatchDuration, _matchSprite);
 		}
 
 		public void Disable() {

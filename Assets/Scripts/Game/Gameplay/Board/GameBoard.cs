@@ -20,14 +20,14 @@ namespace Game.Gameplay.Board {
 
 		private int _width;
 		private int _height;
-		private Sprite _tickSprite;
+		private Sprite _matchSprite;
 
-		public void Prepare(LevelInfo levelInfo, Sprite tickSprite) {
+		public void Prepare(LevelInfo levelInfo, Sprite matchSprite) {
 			State = GameState.None;
 
 			_width = levelInfo.GridWidth;
 			_height = levelInfo.GridHeight;
-			_tickSprite = tickSprite;
+			_matchSprite = matchSprite;
 
 			BoardRenderer.size = new Vector2(_width + 0.2f, _height + 0.2f);
 
@@ -42,7 +42,7 @@ namespace Game.Gameplay.Board {
 
 			for (int i = 0; i < _height; i++) {
 				var row = new Row();
-				row.Prepare(baseYPos + i, baseXPos, _width, _tickSprite);
+				row.Prepare(baseYPos + i, baseXPos, _width, _matchSprite);
 
 				Rows[i] = row;
 			}
@@ -72,7 +72,15 @@ namespace Game.Gameplay.Board {
 			yield return new WaitForSeconds(Properties.ItemSwapDuration);
 
 			/// check out the needed rows
-			CheckRows(HitItem, item);
+			if (CheckRows(HitItem, item)) {
+				ScoreManager.UpdateMoveCount();
+
+				yield return new WaitForSeconds(Rows[0].RowMatchDuration);
+			}
+
+			else {
+				ScoreManager.UpdateMoveCount();
+			}
 
 			/// check move count
 			ScoreManager.MoveSpent();
@@ -90,16 +98,18 @@ namespace Game.Gameplay.Board {
 			item.transform.DOMove(hitItemPos, Properties.ItemSwapDuration);
 		}
 
-		private void CheckRows(Item.Item hitItem, Item.Item item) {
+		private bool CheckRows(Item.Item hitItem, Item.Item item) {
 			/// items swapped in the same row
 			if (hitItem.Row == item.Row) {
 				Rows[item.Row].UpdateRowData(hitItem.Column, item.Column);
-				return;
+				return false;
 			}
 
 			/// items swapped in the same column
-			Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager);
-			Rows[item.Row].UpdateRowData(item, ScoreManager);
+			var a = Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager);
+			var b = Rows[item.Row].UpdateRowData(item, ScoreManager);
+
+			return a || b;
 		}
 
 		public void DisableRows() {

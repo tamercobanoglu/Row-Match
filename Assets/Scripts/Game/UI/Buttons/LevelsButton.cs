@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Settings;
+using DG.Tweening;
 
 namespace Game.UI.Buttons {
     public class LevelsButton : MonoBehaviour, IButton {
@@ -9,6 +11,7 @@ namespace Game.UI.Buttons {
         private bool _isSelected;
 
         public UIMenu UIManager;
+        public SpriteRenderer Image;
 
         public void Operate(Vector3 pos, TouchPhase touchPase) {
 
@@ -33,6 +36,8 @@ namespace Game.UI.Buttons {
 
         public void Selected(Vector3 pos) {
             _isSelected = true;
+            Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one * 0.9f, Properties.ButtonAnimDuration);
         }
 
         public void Moved(Vector3 pos) {
@@ -46,12 +51,17 @@ namespace Game.UI.Buttons {
         public void Released(Vector3 pos) {
             if (!_isSelected) return;
 
+            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
+
             UIManager.LevelsPopup.Popup();
 
             _isSelected = false;
         }
 
         public void Canceled(Vector3 pos) {
+            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
             _isSelected = false;
         }
     }

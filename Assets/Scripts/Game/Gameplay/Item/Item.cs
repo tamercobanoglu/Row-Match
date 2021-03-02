@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Game.Gameplay.Item {
 	public class Item : MonoBehaviour {
@@ -28,8 +29,14 @@ namespace Game.Gameplay.Item {
 			_itemType = itemType;
 		}
 
-		public void Complete(Sprite sprite) {
-			SpriteRenderer.sprite = sprite;
+		public void Animate(float itemMatchDuration) {
+			var seq = DOTween.Sequence();
+			seq.Append(transform.DOShakeRotation(itemMatchDuration));
+		}
+
+		public void Complete(Sprite matchSprite) {
+			SpriteRenderer.sprite = matchSprite;
+			SpriteRenderer.size = Vector2.one * 0.8f;
 			BoxCollider2D.enabled = false;
 		}
 	}

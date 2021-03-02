@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Game.UI.Menu.Popup {
 	public class LevelsPanel : MonoBehaviour, IButton {
@@ -12,16 +13,21 @@ namespace Game.UI.Menu.Popup {
 		private bool _isSelected = true;
 
 		public Transform LevelsParent;
-		private Coroutine _scrollCoroutine, _returnCoroutine;
+		[HideInInspector] public float SlidingDuration;
+
 		private Vector3 _pos;
+		private int _levelCount;
 		private float _offsetY, _basePosY, _topPosY, _instantPosY, _time;
 
 		[SerializeField] private float _acc = 1f;
 		[SerializeField] private float _maxSpeed = 50f;
 
 		public void Prepare(int levelCount) {
+			SlidingDuration = 0.25f;
+
+			_levelCount = levelCount;
 			_basePosY = 3.5f;
-			_topPosY = CalculateTopYPos(levelCount);
+			_topPosY = CalculateTopYPos(_levelCount);
 		}
 
 		public void Operate(Vector3 pos, TouchPhase touchPase) {
@@ -79,10 +85,10 @@ namespace Game.UI.Menu.Popup {
 
 			/// sliding process
 			if (_time != 0) {
-				_scrollCoroutine = StartCoroutine(Slide((pos.y - _instantPosY) / _time));
+				StartCoroutine(Slide((pos.y - _instantPosY) / _time));
 			}
 			else if(_time == 0 && OutOfBounds()) {
-				_returnCoroutine = StartCoroutine(Return(pos.y - _instantPosY > 0 ? LimitPosType.Top : LimitPosType.Base));
+				StartCoroutine(Return(pos.y - _instantPosY > 0 ? LimitPosType.Top : LimitPosType.Base));
 			}
 
 			_time = 0;
@@ -135,6 +141,17 @@ namespace Game.UI.Menu.Popup {
 			}
 		}
 
+		public void ResetPanelPos() {
+			LevelsParent.position = new Vector3(
+				LevelsParent.position.x,
+				_basePosY,
+				LevelsParent.position.z);
+		}
+
+		public void SelfSlide(int levelIndex) {
+			LevelsParent.DOLocalMoveY(CalculateSelfSlidingPosY(levelIndex), SlidingDuration);
+		}
+
 		#region Calculations
 		private float CalculateTopYPos(int levelCount) {
 			var levelCardImgHeight = 1.8f;
@@ -147,6 +164,17 @@ namespace Game.UI.Menu.Popup {
 			var distance = extendedPanelHeight - (levelCardImgHeight / 2 + _basePosY + halfOfPanelHeight);
 
 			return _basePosY + distance;
+		}
+
+		private float CalculateSelfSlidingPosY(int levelIndex) {
+			var localBasePosY = _basePosY + 0.5f;
+			var localTopPosY = _topPosY + 0.5f;
+			var levelCardMargin = 2.25f;
+
+			var distance = localBasePosY + levelIndex * levelCardMargin;
+			distance = distance >= localTopPosY ? localTopPosY : distance;
+
+			return distance;
 		}
 
 		private float LimitVelocity(float vel) {
@@ -166,13 +194,6 @@ namespace Game.UI.Menu.Popup {
 			return vel < 0 ? posY <= _topPosY : posY >= _basePosY;
 		}
 		#endregion
-
-		public void ResetPanelPos() {
-			LevelsParent.position = new Vector3(
-				LevelsParent.position.x,
-				_basePosY,
-				LevelsParent.position.z);
-		}
 	}
 
 	public enum LimitPosType { 

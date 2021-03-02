@@ -22,7 +22,6 @@ namespace PlayerInfo {
 
 		public void SavePlayer() {
 			SaveSystem.SavePlayer(this);
-			///Debug.Log("Player saved!");
 		}
 
 		private bool LoadPlayer() {
@@ -31,8 +30,6 @@ namespace PlayerInfo {
 			if (data != null) {
 				UnlockedLevels = data.UnlockedLevels;
 				Scores = data.Scores;
-
-				///Debug.Log("Player loaded!");
 
 				return true;
 			}
@@ -53,8 +50,6 @@ namespace PlayerInfo {
 			for (int i = 0; i < Scores.Length; i++) {
 				Scores[i] = 0;
 			}
-
-			///Debug.Log("Player created!");
 
 			SavePlayer();
 		}
