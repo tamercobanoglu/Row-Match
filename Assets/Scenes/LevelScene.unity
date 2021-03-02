@@ -922,7 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47ec3c41db96624cb21bf4e0f475c54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 1145547083}
+  Player: {fileID: 0}
   SceneLoader: {fileID: 1145547084}
   ScreenManager: {fileID: 519420030}
   FadeRenderer: {fileID: 1582693966}
@@ -1602,7 +1602,6 @@ GameObject:
   - component: {fileID: 1145547081}
   - component: {fileID: 1145547085}
   - component: {fileID: 1145547084}
-  - component: {fileID: 1145547083}
   - component: {fileID: 1145547082}
   m_Layer: 0
   m_Name: Settings
@@ -1637,20 +1636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c58deaccb221f429e334c8c08857d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1145547083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145547080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffda39c6b51f66042807304f868d7bf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UnlockedLevels: 01000000000000000000000000000000000000000000000000
-  Scores: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!114 &1145547084
 MonoBehaviour:
   m_ObjectHideFlags: 0

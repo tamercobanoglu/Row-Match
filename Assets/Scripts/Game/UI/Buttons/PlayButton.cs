@@ -2,6 +2,7 @@
 using UnityEngine;
 using Utils;
 using DG.Tweening;
+using PlayerInfo;
 
 namespace Game.UI.Buttons {
 	public class PlayButton : MonoBehaviour, IButton {
@@ -103,7 +104,7 @@ namespace Game.UI.Buttons {
             Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
-            Properties.CurrentLevel = _levelNum;
+            Player.Instance.CurrentLevel = _levelNum;
             _uiManager.SceneLoader.LoadScene(SceneType.LevelScene);
 
             _isSelected = false;

@@ -5,9 +5,11 @@ using Game.UI.Menu.Popup;
 using UnityEngine;
 using Settings;
 using System.Collections;
+using PlayerInfo;
 
 namespace Game.UI {
 	public class UIMenu : UIManager {
+		public Player Player;
 		public LevelsButton LevelsButton;
 		public LevelsPopup LevelsPopup;
 		public CelebrationPanel CelebrationPanel;
@@ -38,7 +40,6 @@ namespace Game.UI {
 				return;
 			}
 
-			Player.Initialize(LevelInfoPack.Levels.Length);
 			Load();
 		}
 
@@ -48,12 +49,14 @@ namespace Game.UI {
 			AvailableLevels = Properties.FirstInstallAvailableLevels;
 
 			Initialize();
+			Fade(FadeType.In);
 		}
 
 		private void FirstSceneLoading() {
 			_firstSceneLoading = false;
 
 			Initialize();
+			Fade(FadeType.In);
 		}
 
 		private void Load() {
@@ -68,10 +71,10 @@ namespace Game.UI {
 			Fade(FadeType.In);
 			yield return new WaitForSeconds(Properties.FadeOutDuration);
 
-			if (!Properties.HighestScoreAchieved) {
+			if (!Player.Instance.HighestScoreAchieved) {
 				LevelsPopup.Popup();
 				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
-				LevelsPopup.LevelsPanel.SelfSlide(Properties.CurrentLevel - 1);
+				LevelsPopup.LevelsPanel.SelfSlide(Player.Instance.CurrentLevel - 1);
 				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
 			}
 
@@ -79,11 +82,11 @@ namespace Game.UI {
 				PlayButton playButton = null;
 
 				/// do not try to animate next play button if it does not exist
-				if (Properties.CurrentLevel != AvailableLevels) {
-					playButton = LevelsPopup.LevelCards[Properties.CurrentLevel].PlayButton;
+				if (Player.Instance.CurrentLevel != AvailableLevels) {
+					playButton = LevelsPopup.LevelCards[Player.Instance.CurrentLevel].PlayButton;
 				}
 
-				CelebrationPanel.Prepare(Player.Scores[Properties.CurrentLevel - 1]);
+				CelebrationPanel.Prepare(Player.Instance.Scores[Player.Instance.CurrentLevel - 1]);
 				CelebrationPanel.Animate();
 				yield return new WaitForSeconds(CelebrationPanel.AnimDuration);
 
@@ -92,16 +95,16 @@ namespace Game.UI {
 				CelebrationPanel.Deactivate();
 
 				/// lock the play button of new level temporarily
-				if (playButton != null && !Properties.OldLevelRecord) 
+				if (playButton != null && !Player.Instance.OldLevelRecord) 
 					playButton.LockTemp();
 
 				LevelsPopup.Popup();
 				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
-				LevelsPopup.LevelsPanel.SelfSlide(Properties.CurrentLevel - 1);
+				LevelsPopup.LevelsPanel.SelfSlide(Player.Instance.CurrentLevel - 1);
 				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
 
 				/// animate unlocking if it's locked
-				if (playButton != null && !Properties.OldLevelRecord) {
+				if (playButton != null && !Player.Instance.OldLevelRecord) {
 					playButton.AnimateUnlocking();
 					yield return new WaitForSeconds(playButton.AnimDuration);
 					playButton.Activate();
@@ -113,7 +116,7 @@ namespace Game.UI {
 		}
 
 		protected override void Initialize() {
-			LevelsPopup.Initialize(this, Player);
+			LevelsPopup.Initialize(this, Player.Instance);
 		}
 	}
 }

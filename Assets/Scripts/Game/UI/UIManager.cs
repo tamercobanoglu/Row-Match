@@ -7,7 +7,6 @@ using Game.Gameplay.Level;
 
 namespace Game.UI {
     public abstract class UIManager : MonoBehaviour {
-        public Player Player;
         public SceneLoader SceneLoader;
         public ScreenManager ScreenManager;
         public SpriteRenderer FadeRenderer;

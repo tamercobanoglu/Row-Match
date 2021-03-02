@@ -15,14 +15,9 @@ namespace Settings {
         /// for levels button and play buttons
         public static readonly Color32 ButtonColor = new Color32(109, 168, 80, 255);
         public static readonly Color32 LockedButtonColor = new Color32(140, 140, 140, 255);
-        public static readonly Color32 PressedButtonColor = new Color32(140, 140, 140, 255);
+        public static readonly Color32 PressedButtonColor = new Color32(76, 121, 53, 255);
 
         public static readonly int FirstInstallAvailableLevels = 10;
-
-        /// [CLEAN] communication between scenes
-        public static int CurrentLevel = 1;
-        public static bool HighestScoreAchieved;
-        public static bool OldLevelRecord;
     }
 }
 

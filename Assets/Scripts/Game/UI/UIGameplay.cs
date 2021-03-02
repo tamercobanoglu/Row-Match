@@ -18,10 +18,9 @@ namespace Game.UI {
         protected override void Awake() {
             Initialize();
 
-            _currentLevel = Properties.CurrentLevel;
+            _currentLevel = Player.Instance.CurrentLevel;
 
-            Player.Initialize(LevelInfoPack.Levels.Length);
-            GameplayInfo.Initialize(Player.Scores, _currentLevel, LevelInfoPack.Levels);
+            GameplayInfo.Initialize(Player.Instance.Scores, _currentLevel, LevelInfoPack.Levels);
             LevelManager.Initialize(_currentLevel, LevelInfoPack.Levels);
             ScoreManager.Initialize(this, LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
         }
@@ -50,23 +49,23 @@ namespace Game.UI {
         }
 
         private void UpdatePlayer(int score) {
-			if (score > Player.Scores[Properties.CurrentLevel - 1]) {
-                if (Player.UnlockedLevels[Properties.CurrentLevel]) {
-                    Properties.OldLevelRecord = true;
+			if (score > Player.Instance.Scores[Player.Instance.CurrentLevel - 1]) {
+                if (Player.Instance.UnlockedLevels[Player.Instance.CurrentLevel]) {
+                    Player.Instance.OldLevelRecord = true;
                 }
 
                 else {
-                    Properties.OldLevelRecord = false;
-                    Player.UnlockedLevels[Properties.CurrentLevel] = true;
+                    Player.Instance.OldLevelRecord = false;
+                    Player.Instance.UnlockedLevels[Player.Instance.CurrentLevel] = true;
                 }
-                
-                Player.Scores[Properties.CurrentLevel - 1] = score;
-                Properties.HighestScoreAchieved = true;
-                Player.SavePlayer();
+
+                Player.Instance.Scores[Player.Instance.CurrentLevel - 1] = score;
+                Player.Instance.HighestScoreAchieved = true;
+                Player.Instance.SavePlayer();
                 return;
 			}
 
-            Properties.HighestScoreAchieved = false;
+            Player.Instance.HighestScoreAchieved = false;
         }
     }
 }

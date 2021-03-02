@@ -7,9 +7,26 @@ namespace PlayerInfo {
 		[HideInInspector] public bool[] UnlockedLevels;
 		[HideInInspector] public int[] Scores;
 
+		public static Player Instance { get { return instance; } }
+		private static Player instance;
+
+		/// communication between scenes
+		public int CurrentLevel;
+		public bool HighestScoreAchieved;
+		public bool OldLevelRecord;
+
 		private int _levelCount;
 
 		public bool Initialize(int levelCount) {
+			if (instance == null) {
+				instance = this;
+			}
+
+			else if (instance != this) {
+				Destroy(this);
+			}
+
+			CurrentLevel = 1;
 			_levelCount = levelCount;
 
 			if (!LoadPlayer()) {
