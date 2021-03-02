@@ -7,15 +7,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using PlayerInfo;
+using Game.UI;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {
+		public UIGameplay UIManager;
 		public ScoreManager ScoreManager;
 		public SpriteRenderer BoardRenderer;
 		public Transform ItemsParent;
 
 		[HideInInspector] public Row[] Rows = null;
-		[HideInInspector] public GameState State;
 		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
@@ -23,8 +24,6 @@ namespace Game.Gameplay.Board {
 		private Sprite _matchSprite;
 
 		public void Prepare(LevelInfo levelInfo, Sprite matchSprite) {
-			State = GameState.None;
-
 			_width = levelInfo.GridWidth;
 			_height = levelInfo.GridHeight;
 			_matchSprite = matchSprite;
@@ -50,18 +49,18 @@ namespace Game.Gameplay.Board {
 
 		public void ItemTapped(Item.Item item) {
 			HitItem = item;
-			State = GameState.SelectionStarted;
+			UIManager.State = GameState.SelectionStarted;
 		}
 
 		public void SwapAttempt(Item.Item item) {
 			/// if the two items are diagonally aligned (different row and column), just return
 			if (!Utilities.AreVerticalOrHorizontalNeighbors(HitItem,
 				item)) {
-				State = GameState.None;
+				UIManager.State = GameState.None;
 				return;
 			}
 
-			State = GameState.Animating;
+			UIManager.State = GameState.Animating;
 			Utilities.FixSortingLayer(HitItem.SpriteRenderer, item.SpriteRenderer);
 			StartCoroutine(Swap(item));
 		}
@@ -85,7 +84,7 @@ namespace Game.Gameplay.Board {
 			/// check move count
 			ScoreManager.MoveSpent();
 
-			State = GameState.None;
+			UIManager.State = GameState.None;
 		}
 
 		private void SwapItems(Item.Item hitItem, Item.Item item) {
@@ -119,7 +118,7 @@ namespace Game.Gameplay.Board {
 		}
 
 		public void EndGame() {
-			State = GameState.Ended;
+			UIManager.State = GameState.Ended;
 		}
 	}
 }

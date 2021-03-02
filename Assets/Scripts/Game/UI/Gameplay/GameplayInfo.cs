@@ -3,14 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
+using Settings;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
+        [Header("Parents")]
+        public Transform HighestScoreTransform;
+        public Transform MoveCountTransform;
+        public Transform ScoreTransform;
+
+        [Header("Texts")]
         public TextMeshPro HighestScoreText;
-        public TextMeshPro ScoreText;
         public TextMeshPro MoveCountText;
+        public TextMeshPro ScoreText;
+        public Transform InstructionText;
+
+        [HideInInspector] public float InstructionDuration;
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
+            InstructionDuration = 2f;
+
             HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();
         }
@@ -21,6 +34,28 @@ namespace Game.UI.Gameplay {
 
         public void UpdateMoveCountText(int moveCount) {
             MoveCountText.text = moveCount.ToString();
+        }
+
+        public void BringInstructionText() {
+            InstructionText.gameObject.SetActive(true);
+
+            var seq = DOTween.Sequence();
+            seq.Append(InstructionText.DOScale(Vector3.one, Properties.FadeOutDuration))
+                .Append(InstructionText.DOMoveY(InstructionText.position.y + 0.2f, 1.75f));
+        }
+
+        public void HideInstructionText() {
+            InstructionText.DOScale(Vector3.one * 0.01f, Properties.FadeOutDuration);
+        }
+
+        public void BringGameInfo() {
+            HighestScoreTransform.gameObject.SetActive(true);
+            MoveCountTransform.gameObject.SetActive(true);
+            ScoreTransform.gameObject.SetActive(true);
+
+            HighestScoreTransform.DOMoveX(HighestScoreTransform.position.x + 7f, Properties.FadeOutDuration * 2);
+            MoveCountTransform.DOMoveX(MoveCountTransform.position.x - 7f, Properties.FadeOutDuration * 2);
+            ScoreTransform.DOMoveX(ScoreTransform.position.x + 7f, Properties.FadeOutDuration * 2);
         }
     }
 }

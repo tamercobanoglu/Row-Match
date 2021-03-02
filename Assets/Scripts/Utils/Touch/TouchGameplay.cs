@@ -1,11 +1,13 @@
 ﻿using Game.Gameplay.Board;
 using Game.Gameplay.Item;
 using Game.Mechanics;
+using Game.UI;
 using Game.UI.Buttons;
 using UnityEngine;
 
 namespace Utils.Touch {
     public class TouchGameplay : TouchManager {
+        public UIGameplay UIManager;
         public GameBoard GameBoard;
 
         private const string ReturnButtonTag = "ReturnButton";
@@ -19,19 +21,19 @@ namespace Utils.Touch {
         }
 
         protected override void GetTouchEditor() {
-			if (GameBoard.State == GameState.None) {
+			if (UIManager.State == GameState.None) {
                 if (Input.GetMouseButtonDown(0)) {
 					ExecuteSelect(Input.mousePosition);
 				}
 			}
 
-			else if (GameBoard.State == GameState.SelectionStarted) {
+			else if (UIManager.State == GameState.SelectionStarted) {
 				if (Input.GetMouseButton(0)) {
 					ExecuteSwipe(Input.mousePosition);
 				}
 			}
 
-			else if (GameBoard.State == GameState.Ended) {
+			else if (UIManager.State == GameState.Ended) {
 				if (Input.GetMouseButtonUp(0)) {
 					ExecuteTouch(Input.mousePosition);
 				}
@@ -42,19 +44,19 @@ namespace Utils.Touch {
             if (Input.touchCount <= 0) return;
             var touch = Input.GetTouch(0);
 
-            if (GameBoard.State == GameState.None) {
+            if (UIManager.State == GameState.None) {
                 if (touch.phase == TouchPhase.Began) {
                     ExecuteSelect(touch.position);
                 }
             }
 
-            else if (GameBoard.State == GameState.SelectionStarted) {
+            else if (UIManager.State == GameState.SelectionStarted) {
                 if (touch.phase == TouchPhase.Moved) {
                     ExecuteSwipe(touch.position);
                 }
             }
 
-            else if (GameBoard.State == GameState.Ended) {
+            else if (UIManager.State == GameState.Ended) {
                 if (touch.phase == TouchPhase.Ended) {
                     ExecuteTouch(touch.position);
                 }

@@ -5,6 +5,7 @@ using PlayerInfo;
 using System.Collections;
 using UnityEngine;
 using Game.UI.Buttons;
+using Game.Mechanics;
 
 namespace Game.UI {
     public class UIGameplay : UIManager {
@@ -13,20 +14,24 @@ namespace Game.UI {
         public MessagePanel MessagePanel;
         public ReturnButton ReturnButton;
         public LevelManager LevelManager;
+
+        [HideInInspector] public GameState State;
         [SerializeField] private int _currentLevel;
 
         protected override void Awake() {
+            State = GameState.Animating;
             Initialize();
+            Load();
+        }
+
+        protected override void Initialize() {
+            base.Initialize();
 
             _currentLevel = Player.Instance.CurrentLevel;
 
             GameplayInfo.Initialize(Player.Instance.Scores, _currentLevel, LevelInfoPack.Levels);
             LevelManager.Initialize(_currentLevel, LevelInfoPack.Levels);
             ScoreManager.Initialize(this, LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
-        }
-
-        protected override void Initialize() {
-            base.Initialize();
 
             Fade(FadeType.In);
         }
@@ -66,6 +71,26 @@ namespace Game.UI {
 			}
 
             Player.Instance.HighestScoreAchieved = false;
+        }
+
+        private void Load() {
+            StartCoroutine(LoadingProcess());
+        }
+
+        IEnumerator LoadingProcess() {
+            Fade(0.65f, Properties.FadeOutDuration);
+            GameplayInfo.BringInstructionText();
+            yield return new WaitForSeconds(GameplayInfo.InstructionDuration);
+
+            GameplayInfo.HideInstructionText();
+            yield return new WaitForSeconds(Properties.FadeOutDuration);
+
+            Fade(0f, Properties.FadeOutDuration * 2);
+            GameplayInfo.BringGameInfo();
+            yield return new WaitForSeconds(Properties.FadeOutDuration * 2);
+
+            GameplayInfo.InstructionText.gameObject.SetActive(false);
+            State = GameState.None;
         }
     }
 }

@@ -11,9 +11,9 @@ namespace PlayerInfo {
 		private static Player instance;
 
 		/// communication between scenes
-		public int CurrentLevel;
-		public bool HighestScoreAchieved;
-		public bool OldLevelRecord;
+		[HideInInspector] public int CurrentLevel;
+		[HideInInspector] public bool HighestScoreAchieved;
+		[HideInInspector] public bool OldLevelRecord;
 
 		private int _levelCount;
 

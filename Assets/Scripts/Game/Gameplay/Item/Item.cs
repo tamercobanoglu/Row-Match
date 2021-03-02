@@ -30,8 +30,7 @@ namespace Game.Gameplay.Item {
 		}
 
 		public void Animate(float itemMatchDuration) {
-			var seq = DOTween.Sequence();
-			seq.Append(transform.DOShakeRotation(itemMatchDuration));
+			transform.DOShakeRotation(itemMatchDuration);
 		}
 
 		public void Complete(Sprite matchSprite) {

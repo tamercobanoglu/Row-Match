@@ -30,6 +30,11 @@ namespace Game.UI {
             FadeRenderer.enabled = true;
             FadeRenderer.DOFade((float)fade, Properties.FadeOutDuration);
         }
+
+        public void Fade(float fade, float time) {
+            FadeRenderer.enabled = true;
+            FadeRenderer.DOFade((float)fade, time);
+        }
     }
 
     public enum FadeType { 
