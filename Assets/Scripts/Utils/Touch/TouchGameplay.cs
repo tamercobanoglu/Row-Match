@@ -1,9 +1,9 @@
-﻿using Game.Gameplay.Board;
-using Game.Gameplay.Item;
-using Game.Mechanics;
+﻿using UnityEngine;
 using Game.UI;
+using Game.Mechanics;
 using Game.UI.Buttons;
-using UnityEngine;
+using Game.Gameplay.Item;
+using Game.Gameplay.Board;
 
 namespace Utils.Touch {
     public class TouchGameplay : TouchManager {

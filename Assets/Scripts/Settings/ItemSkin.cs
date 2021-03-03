@@ -1,6 +1,4 @@
-﻿using Game.Gameplay.Item;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Settings {
 	[CreateAssetMenu(menuName = "Item Skin", fileName = "New Item Skin")]

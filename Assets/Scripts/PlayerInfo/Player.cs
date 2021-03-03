@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PlayerInfo {
 	public class Player : MonoBehaviour {
@@ -69,6 +67,27 @@ namespace PlayerInfo {
 			}
 
 			SavePlayer();
+		}
+
+		public void UpdatePlayer(int score) {
+			if (score > Scores[CurrentLevel - 1]) {
+
+				/// unlock next level if it exists
+				if (CurrentLevel != UnlockedLevels.Length) {
+					OldLevelRecord = UnlockedLevels[CurrentLevel];
+
+					if (!UnlockedLevels[CurrentLevel]) {
+						UnlockedLevels[CurrentLevel] = true;
+					}
+				}
+
+				Scores[CurrentLevel - 1] = score;
+				HighestScoreAchieved = true;
+				SavePlayer();
+				return;
+			}
+
+			HighestScoreAchieved = false;
 		}
 	}
 }

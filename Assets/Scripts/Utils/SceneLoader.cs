@@ -1,9 +1,8 @@
-﻿using Game.UI;
-using Settings;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using Game.UI;
+using Settings;
 
 namespace Utils {
     public class SceneLoader : MonoBehaviour {

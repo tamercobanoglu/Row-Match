@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using DG.Tweening;
+﻿using UnityEngine;
+using System.Collections;
 using Settings;
+using DG.Tweening;
+using TMPro;
 
 namespace Game.UI.Menu {
 	public class CelebrationPanel : MonoBehaviour {
@@ -14,41 +13,57 @@ namespace Game.UI.Menu {
 		public TextMeshPro LabelText;
 		public TextMeshPro HighScoreText;
 
-		[HideInInspector] public float AnimDuration;
-		[HideInInspector] public float DisappearingDuration;
+		private ParticleSystem particles;
+		private float _fadeDuration;
+		private float _particleDuration;
 
-		public void Prepare(int highScore) {
-			AnimDuration = 3f;
-			DisappearingDuration = 0.5f;
+		private void Prepare(int highScore) {
+			_particleDuration = 3.5f;
+			_fadeDuration = 0.5f;
 
 			HighScoreText.text = highScore.ToString();
 		}
 
-		public void Animate() {
+		public IEnumerator Animate(int highScore) {
+			Prepare(highScore);
+
+			BringElements();
+			yield return new WaitForSeconds(_fadeDuration);
+			StartParticles();
+			yield return new WaitForSeconds(_particleDuration);
+			StopAnimating();
+			yield return new WaitForSeconds(_fadeDuration);
+			Deactivate();
+		}
+
+		private void BringElements() {
 			gameObject.SetActive(true);
 
-			/// Particles.Play();
+			Background.DOFade(0.65f, _fadeDuration);
+			CongratsText.DOFade(1f, _fadeDuration);
+			Icon.transform.DOMoveX(0f, _fadeDuration);
+		}
 
-			Background.DOFade(1f, 1f);
-			CongratsText.DOFade(1f, 0.5f);
+		private void StartParticles() {
+			particles = Instantiate(Particles, Icon.transform.position, Quaternion.identity, Icon.transform);
+
+			particles.Play();
 
 			var seq = DOTween.Sequence();
-			seq.Append(Icon.transform.DOMoveX(0f, 0.5f))
-				.Append(LabelText.transform.DOScale(Vector3.one, Properties.FadeOutDuration))
+			seq.Append(LabelText.transform.DOScale(Vector3.one, Properties.FadeOutDuration))
 				.Append(HighScoreText.transform.DOScale(Vector3.one, Properties.FadeOutDuration));
 		}
 
-		public void StopAnimating() {
-			/// Particles.Stop();
-
-			Background.DOFade(0f, 0.5f);
-			CongratsText.DOFade(0f, 0.5f);
-			Icon.transform.DOMoveX(-15f, 0.5f);
-			LabelText.DOFade(0f, 0.5f);
-			HighScoreText.DOFade(0f, 0.5f);
+		private void StopAnimating() {
+			Background.DOFade(0f, _fadeDuration);
+			CongratsText.DOFade(0f, _fadeDuration);
+			Icon.transform.DOMoveX(-15f, _fadeDuration);
+			LabelText.DOFade(0f, _fadeDuration);
+			HighScoreText.DOFade(0f, _fadeDuration);
 		}
 
-		public void Deactivate() {
+		private void Deactivate() {
+			Destroy(particles.gameObject, 1f);
 			gameObject.SetActive(false);
 		}
 	}

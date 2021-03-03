@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Utils;
-using DG.Tweening;
 using Settings;
+using DG.Tweening;
 
 namespace Game.UI.Buttons {
     public class ReturnButton : MonoBehaviour, IButton {

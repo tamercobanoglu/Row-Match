@@ -1,8 +1,9 @@
-﻿using Settings;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 using Utils;
-using DG.Tweening;
+using Settings;
 using PlayerInfo;
+using DG.Tweening;
 
 namespace Game.UI.Buttons {
 	public class PlayButton : MonoBehaviour, IButton {
@@ -17,13 +18,12 @@ namespace Game.UI.Buttons {
         public MeshRenderer Text;
         public BoxCollider2D BoxCollider2D;
 
-        [HideInInspector] public float AnimDuration;
         [SerializeField] private int _levelNum;
-
         private UIManager _uiManager;
+        private float _animDuration;
 
         public void Prepare(UIManager uiManager, int levelNum, bool isUnlocked) {
-            AnimDuration = 3.25f;
+            _animDuration = 3.25f;
 
             _levelNum = levelNum;
             _uiManager = uiManager;
@@ -47,7 +47,13 @@ namespace Game.UI.Buttons {
             BoxCollider2D.enabled = false;
         }
 
-        public void AnimateUnlocking() {
+        public IEnumerator Animate() {
+            AnimateUnlocking();
+            yield return new WaitForSeconds(_animDuration);
+            Activate();
+        }
+
+        private void AnimateUnlocking() {
             Text.transform.localScale = Vector3.one * 0.01f;
             Text.enabled = true;
 
@@ -58,7 +64,7 @@ namespace Game.UI.Buttons {
                 .Append(Image.DOColor(Properties.ButtonColor, 0.5f));
         }
 
-        public void Activate() {
+        private void Activate() {
             Icon.enabled = false;
             BoxCollider2D.enabled = true;
         }
@@ -87,7 +93,7 @@ namespace Game.UI.Buttons {
         public void Selected(Vector3 pos) {
             _isSelected = true;
             Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
-            transform.DOScale(Vector3.one * 0.9f, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
         }
 
         public void Moved(Vector3 pos) {

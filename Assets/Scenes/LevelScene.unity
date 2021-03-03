@@ -745,6 +745,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -772,7 +773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b017f348437ae8443a7d5c0c6c04b45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 519420031}
+  Cam: {fileID: 519420031}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -830,6 +831,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!124 &519420033
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
 --- !u!1 &520767233
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,7 +907,6 @@ MonoBehaviour:
   MoveCountText: {fileID: 166829250}
   ScoreText: {fileID: 988220931}
   InstructionText: {fileID: 256659252}
-  InstructionDuration: 0
 --- !u!4 &550579098
 Transform:
   m_ObjectHideFlags: 0
@@ -2016,7 +2024,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Run out of moves!
+  m_text: Ran out of moves!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f64256b8ca636814d8c81a1a45151114, type: 2}
   m_sharedMaterial: {fileID: -3297648613285002418, guid: f64256b8ca636814d8c81a1a45151114,
@@ -2288,7 +2296,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 940823f4a6fe95745a6b19903d66df38, type: 3}
-  m_Color: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 1}
+  m_Color: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1

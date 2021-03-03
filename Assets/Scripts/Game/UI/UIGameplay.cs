@@ -54,23 +54,7 @@ namespace Game.UI {
         }
 
         private void UpdatePlayer(int score) {
-			if (score > Player.Instance.Scores[Player.Instance.CurrentLevel - 1]) {
-                if (Player.Instance.UnlockedLevels[Player.Instance.CurrentLevel]) {
-                    Player.Instance.OldLevelRecord = true;
-                }
-
-                else {
-                    Player.Instance.OldLevelRecord = false;
-                    Player.Instance.UnlockedLevels[Player.Instance.CurrentLevel] = true;
-                }
-
-                Player.Instance.Scores[Player.Instance.CurrentLevel - 1] = score;
-                Player.Instance.HighestScoreAchieved = true;
-                Player.Instance.SavePlayer();
-                return;
-			}
-
-            Player.Instance.HighestScoreAchieved = false;
+            Player.Instance.UpdatePlayer(score);
         }
 
         private void Load() {
@@ -79,17 +63,11 @@ namespace Game.UI {
 
         IEnumerator LoadingProcess() {
             Fade(0.65f, Properties.FadeOutDuration);
-            GameplayInfo.BringInstructionText();
-            yield return new WaitForSeconds(GameplayInfo.InstructionDuration);
-
-            GameplayInfo.HideInstructionText();
-            yield return new WaitForSeconds(Properties.FadeOutDuration);
+            yield return StartCoroutine(GameplayInfo.FirstAnimation());
 
             Fade(0f, Properties.FadeOutDuration * 2);
-            GameplayInfo.BringGameInfo();
-            yield return new WaitForSeconds(Properties.FadeOutDuration * 2);
+            yield return StartCoroutine(GameplayInfo.SecondAnimation());
 
-            GameplayInfo.InstructionText.gameObject.SetActive(false);
             State = GameState.None;
         }
     }

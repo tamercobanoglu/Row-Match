@@ -302,7 +302,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 940823f4a6fe95745a6b19903d66df38, type: 3}
-  m_Color: {r: 0.20784314, g: 0.20784314, b: 0.2627451, a: 1}
+  m_Color: {r: 0.15873086, g: 0.20795403, b: 0.2735849, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -535,6 +535,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -562,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b017f348437ae8443a7d5c0c6c04b45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 519420031}
+  Cam: {fileID: 519420031}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -620,6 +621,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!124 &519420033
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
 --- !u!1 &560708165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,14 +1016,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24608ae6d36b8b74293205b2539bef3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Particles: {fileID: 0}
+  Particles: {fileID: 1724394951212351175, guid: 9c25804a3d31a8846a8c2f3054a0828d,
+    type: 3}
   Background: {fileID: 576505751}
   CongratsText: {fileID: 1237909097}
   Icon: {fileID: 1905203044}
   LabelText: {fileID: 1029130634}
   HighScoreText: {fileID: 1314632290}
+  ParticleDuration: 0
   AnimDuration: 0.5
-  DisappearingDuration: 0
 --- !u!1 &719570926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,7 +1629,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1724625837
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
 --- !u!1 &1063260141
 GameObject:
   m_ObjectHideFlags: 0
@@ -1867,7 +1877,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1724625837
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
 --- !u!1 &1314632289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2017,7 +2027,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1724625837
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
 --- !u!222 &1314632292
 CanvasRenderer:
   m_ObjectHideFlags: 2
@@ -2117,6 +2127,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnlockedLevels: 01000000000000000000000000000000000000000000000000
   Scores: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  CurrentLevel: 0
+  HighestScoreAchieved: 0
+  OldLevelRecord: 0
 --- !u!1 &1477600551
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,11 +2409,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1137d4e0af0bc164cba877983d7210e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 1337946483}
   SceneLoader: {fileID: 1337946480}
   ScreenManager: {fileID: 519420030}
   FadeRenderer: {fileID: 889802276}
   LevelInfoPack: {fileID: 11400000, guid: 4f16728d21da0214db004e0e7d2e6f63, type: 2}
+  Player: {fileID: 1337946483}
   LevelsButton: {fileID: 719570928}
   LevelsPopup: {fileID: 474810833}
   CelebrationPanel: {fileID: 609296684}
@@ -2508,7 +2521,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1724625837
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: df59a8728d883dd41b2ff113866a5196, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

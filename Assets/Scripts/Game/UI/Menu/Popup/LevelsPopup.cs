@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 using PlayerInfo;
 using DG.Tweening;
 
@@ -10,14 +9,13 @@ namespace Game.UI.Menu.Popup {
 		public GameObject LevelCardPrefab;
 		public Transform Transform;
 
-		[HideInInspector] public float AnimDuration;
-
 		private UIMenu _uiManager;
+		private float _animDuration;
 		private LevelCard[] _levelCards;
 		public LevelCard[] LevelCards { get { return _levelCards; } }
 
 		public void Initialize(UIMenu uiManager, Player player) {
-			AnimDuration = 0.1f;
+			_animDuration = 0.1f;
 
 			_uiManager = uiManager;
 			_levelCards = new LevelCard[UIMenu.AvailableLevels];
@@ -39,9 +37,9 @@ namespace Game.UI.Menu.Popup {
 		}
 
 		public void Popup() {
-			Transform.localScale = Vector3.one * 0.8f;
+			Transform.localScale = Vector3.one * 0.9f;
 			gameObject.SetActive(true);
-			Transform.DOScale(Vector3.one, AnimDuration);
+			Transform.DOScale(Vector3.one, _animDuration);
 		}
 
 		public void Disappear() {
@@ -49,10 +47,17 @@ namespace Game.UI.Menu.Popup {
 			_uiManager.LevelsButton.Image.color = Settings.Properties.ButtonColor;
 			_uiManager.LevelsButton.Image.transform.localScale = Vector3.one;
 
-			Transform.DOScale(Vector3.one * 0.8f, AnimDuration);
+			Transform.DOScale(Vector3.one * 0.8f, _animDuration);
 			gameObject.SetActive(false);
 
 			LevelsPanel.ResetPanelPos();
+		}
+
+		public IEnumerator Animate(int levelIndex) {
+			Popup();
+			yield return new WaitForSeconds(_animDuration);
+			LevelsPanel.SelfSlide(levelIndex);
+			yield return new WaitForSeconds(LevelsPanel.SlidingDuration);
 		}
 	}
 }

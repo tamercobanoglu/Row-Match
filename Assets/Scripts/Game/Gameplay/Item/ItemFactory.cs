@@ -1,5 +1,5 @@
-﻿using Settings;
-using UnityEngine;
+﻿using UnityEngine;
+using Settings;
 
 namespace Game.Gameplay.Item {
 	public static class ItemFactory {

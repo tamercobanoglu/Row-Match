@@ -1,9 +1,7 @@
-﻿using Game.Gameplay.Level;
+﻿using UnityEngine;
 using Game.UI.Buttons;
-using System.Collections;
-using System.Collections.Generic;
+using Game.Gameplay.Level;
 using TMPro;
-using UnityEngine;
 
 namespace Game.UI.Menu.Popup {
 	public class LevelCard : MonoBehaviour {
@@ -29,12 +27,6 @@ namespace Game.UI.Menu.Popup {
 			}
 
 			return $"Highest Score: {scores[levelIndex]}";
-		}
-
-		public void Unlock() {
-			ScoreInfoText.text = "No Score";
-
-			PlayButton.AnimateUnlocking();
 		}
 	}
 }

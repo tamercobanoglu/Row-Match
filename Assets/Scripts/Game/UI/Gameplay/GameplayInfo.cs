@@ -1,10 +1,9 @@
-﻿using Game.Gameplay.Level;
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using DG.Tweening;
 using Settings;
+using Game.Gameplay.Level;
+using DG.Tweening;
+using TMPro;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
@@ -19,10 +18,10 @@ namespace Game.UI.Gameplay {
         public TextMeshPro ScoreText;
         public Transform InstructionText;
 
-        [HideInInspector] public float InstructionDuration;
+        private float _instructionDuration;
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
-            InstructionDuration = 2f;
+            _instructionDuration = 2f;
 
             HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();
@@ -36,19 +35,32 @@ namespace Game.UI.Gameplay {
             MoveCountText.text = moveCount.ToString();
         }
 
-        public void BringInstructionText() {
+        public IEnumerator FirstAnimation() {
+            BringInstructionText();
+            yield return new WaitForSeconds(_instructionDuration);
+            HideInstructionText();
+            yield return new WaitForSeconds(Properties.FadeOutDuration);
+        }
+
+        public IEnumerator SecondAnimation() {
+            BringGameInfo();
+            yield return new WaitForSeconds(Properties.FadeOutDuration * 2);
+            InstructionText.gameObject.SetActive(false);
+        }
+
+        private void BringInstructionText() {
             InstructionText.gameObject.SetActive(true);
 
             var seq = DOTween.Sequence();
             seq.Append(InstructionText.DOScale(Vector3.one, Properties.FadeOutDuration))
-                .Append(InstructionText.DOMoveY(InstructionText.position.y + 0.2f, 1.75f));
+                .Append(InstructionText.DOMoveY(InstructionText.position.y + 0.4f, 1.75f));
         }
 
-        public void HideInstructionText() {
+        private void HideInstructionText() {
             InstructionText.DOScale(Vector3.one * 0.01f, Properties.FadeOutDuration);
         }
 
-        public void BringGameInfo() {
+        private void BringGameInfo() {
             HighestScoreTransform.gameObject.SetActive(true);
             MoveCountTransform.gameObject.SetActive(true);
             ScoreTransform.gameObject.SetActive(true);
@@ -59,4 +71,3 @@ namespace Game.UI.Gameplay {
         }
     }
 }
-

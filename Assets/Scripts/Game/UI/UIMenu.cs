@@ -1,10 +1,10 @@
-﻿using Game.UI.Menu;
+﻿using UnityEngine;
+using System.Collections;
+using Game.UI.Menu;
 using Game.Mechanics;
 using Game.UI.Buttons;
 using Game.UI.Menu.Popup;
-using UnityEngine;
 using Settings;
-using System.Collections;
 using PlayerInfo;
 
 namespace Game.UI {
@@ -72,10 +72,7 @@ namespace Game.UI {
 			yield return new WaitForSeconds(Properties.FadeOutDuration);
 
 			if (!Player.Instance.HighestScoreAchieved) {
-				LevelsPopup.Popup();
-				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
-				LevelsPopup.LevelsPanel.SelfSlide(Player.Instance.CurrentLevel - 1);
-				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
+				yield return StartCoroutine(LevelsPopup.Animate(Player.Instance.CurrentLevel - 1));
 			}
 
 			else {
@@ -86,28 +83,17 @@ namespace Game.UI {
 					playButton = LevelsPopup.LevelCards[Player.Instance.CurrentLevel].PlayButton;
 				}
 
-				CelebrationPanel.Prepare(Player.Instance.Scores[Player.Instance.CurrentLevel - 1]);
-				CelebrationPanel.Animate();
-				yield return new WaitForSeconds(CelebrationPanel.AnimDuration);
-
-				CelebrationPanel.StopAnimating();
-				yield return new WaitForSeconds(CelebrationPanel.DisappearingDuration);
-				CelebrationPanel.Deactivate();
+				yield return StartCoroutine(CelebrationPanel.Animate(Player.Instance.Scores[Player.Instance.CurrentLevel - 1]));
 
 				/// lock the play button of new level temporarily
 				if (playButton != null && !Player.Instance.OldLevelRecord) 
 					playButton.LockTemp();
 
-				LevelsPopup.Popup();
-				yield return new WaitForSeconds(LevelsPopup.AnimDuration);
-				LevelsPopup.LevelsPanel.SelfSlide(Player.Instance.CurrentLevel - 1);
-				yield return new WaitForSeconds(LevelsPopup.LevelsPanel.SlidingDuration);
+				yield return StartCoroutine(LevelsPopup.Animate(Player.Instance.CurrentLevel - 1));
 
 				/// animate unlocking if it's locked
 				if (playButton != null && !Player.Instance.OldLevelRecord) {
-					playButton.AnimateUnlocking();
-					yield return new WaitForSeconds(playButton.AnimDuration);
-					playButton.Activate();
+					yield return StartCoroutine(playButton.Animate());
 				}
 			}
 

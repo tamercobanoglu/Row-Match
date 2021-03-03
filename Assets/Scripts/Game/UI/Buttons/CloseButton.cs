@@ -1,5 +1,5 @@
-﻿using Game.UI.Menu.Popup;
-using UnityEngine;
+﻿using UnityEngine;
+using Game.UI.Menu.Popup;
 
 namespace Game.UI.Buttons {
     public class CloseButton : MonoBehaviour, IButton {

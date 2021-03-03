@@ -1,13 +1,12 @@
-﻿using Game.Gameplay.Level;
+﻿using System.Collections;
+using UnityEngine;
+using Game.UI;
 using Game.Mechanics;
+using Game.Gameplay.Level;
 using Utils;
 using Settings;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
 using PlayerInfo;
-using Game.UI;
+using DG.Tweening;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {

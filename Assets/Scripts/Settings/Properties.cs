@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Settings {
     public static class Properties {
@@ -20,4 +18,3 @@ namespace Settings {
         public static readonly int FirstInstallAvailableLevels = 10;
     }
 }
-

@@ -1,7 +1,7 @@
-﻿using Game.Gameplay.Board;
+﻿using UnityEngine;
 using Game.Gameplay.Item;
+using Game.Gameplay.Board;
 using Settings;
-using UnityEngine;
 
 namespace Game.Gameplay.Level {
 	public class LevelManager : MonoBehaviour {

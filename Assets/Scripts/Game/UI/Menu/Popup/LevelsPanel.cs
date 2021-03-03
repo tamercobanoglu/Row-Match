@@ -1,7 +1,6 @@
-﻿using Game.UI.Buttons;
+﻿using UnityEngine;
+using Game.UI.Buttons;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
 
 namespace Game.UI.Menu.Popup {
@@ -118,7 +117,7 @@ namespace Game.UI.Menu.Popup {
 
 				LevelsParent.position = pos;
 
-				yield return new WaitForSeconds(Time.deltaTime);
+				yield return new WaitForFixedUpdate();
 			}
 		}
 
@@ -137,7 +136,7 @@ namespace Game.UI.Menu.Popup {
 				}
 
 				LevelsParent.position = pos;
-				yield return new WaitForSeconds(Time.deltaTime);
+				yield return new WaitForFixedUpdate();
 			}
 		}
 

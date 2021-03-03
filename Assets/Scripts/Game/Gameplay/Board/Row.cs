@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using PlayerInfo;
+﻿using UnityEngine;
 using Settings;
-using DG.Tweening;
+using PlayerInfo;
 
 namespace Game.Gameplay.Board {
 	public class Row {

@@ -1,5 +1,5 @@
-﻿using Game.Gameplay.Item;
-using UnityEngine;
+﻿using UnityEngine;
+using Game.Gameplay.Item;
 
 namespace Game.Gameplay.Level {
     [CreateAssetMenu(menuName = "Levels/Level Info", fileName = "LevelInfo_Num")]

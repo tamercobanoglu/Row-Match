@@ -37,7 +37,7 @@ namespace Game.UI.Buttons {
         public void Selected(Vector3 pos) {
             _isSelected = true;
             Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
-            transform.DOScale(Vector3.one * 0.9f, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
         }
 
         public void Moved(Vector3 pos) {
