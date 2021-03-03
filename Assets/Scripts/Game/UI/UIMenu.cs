@@ -13,7 +13,9 @@ namespace Game.UI {
 		public LevelsButton LevelsButton;
 		public LevelsPopup LevelsPopup;
 		public CelebrationPanel CelebrationPanel;
+
 		[HideInInspector] public MenuState State;
+		[HideInInspector] public IButton HitButton = null;
 
 		///  set once when the app first launched
 		public static int AvailableLevels;

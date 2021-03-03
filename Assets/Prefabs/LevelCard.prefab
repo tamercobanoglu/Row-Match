@@ -228,7 +228,6 @@ MonoBehaviour:
   Icon: {fileID: 62812840100658469}
   Text: {fileID: 7613265095683491461}
   BoxCollider2D: {fileID: 554014147616237788}
-  AnimDuration: 0
   _levelNum: 0
 --- !u!61 &554014147616237788
 BoxCollider2D:
@@ -363,7 +362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3567550956238769351}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8149165128623384094}

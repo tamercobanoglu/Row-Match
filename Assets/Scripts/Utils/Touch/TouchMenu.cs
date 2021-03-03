@@ -10,6 +10,7 @@ namespace Utils.Touch {
 		private const string PlayButtonTag = "PlayButton";
 		private const string CloseButtonTag = "CloseButton";
 		private const string LevelsPanelTag = "LevelsPanel";
+		private const string BackgroundTag = "Background";
 
 		public UIMenu UIManager;
 
@@ -22,52 +23,76 @@ namespace Utils.Touch {
 		}
 
 		protected override void GetTouchEditor() {
-			if (UIManager.State == MenuState.Animating) return;
-
-			if (Input.GetMouseButtonDown(0)) {
-				HandleHit(Input.mousePosition, TouchPhase.Began);
+			if (UIManager.State == MenuState.None) {
+				if (Input.GetMouseButtonDown(0)) {
+					ExecuteSelect(Input.mousePosition);
+				}
 			}
 
-			if (Input.GetMouseButton(0)) {
-				HandleHit(Input.mousePosition, TouchPhase.Moved);
-			}
+			else if (UIManager.State == MenuState.SelectionStarted) {
+				if (Input.GetMouseButton(0)) {
+					ExecuteSlide(Input.mousePosition);
+				}
 
-			if (Input.GetMouseButtonUp(0)) {
-				HandleHit(Input.mousePosition, TouchPhase.Ended);
+				if (Input.GetMouseButtonUp(0)) {
+					ExecuteTouch(Input.mousePosition);
+				}
 			}
 		}
 
 		protected override void GetTouchMobile() {
-			if (UIManager.State == MenuState.Animating) return;
 			if (Input.touchCount <= 0) return;
 			var touch = Input.GetTouch(0);
 
-			HandleHit(touch.position, touch.phase);
+			if (UIManager.State == MenuState.None) {
+				if (touch.phase == TouchPhase.Began) {
+					ExecuteSelect(touch.position);
+				}
+			}
+
+			else if (UIManager.State == MenuState.SelectionStarted) {
+				if (touch.phase == TouchPhase.Moved) {
+					ExecuteSlide(touch.position);
+				}
+
+				if (touch.phase == TouchPhase.Ended) {
+					ExecuteTouch(touch.position);
+				}
+			}
 		}
 
-		private void HandleHit(Vector3 pos, TouchPhase touchPhase) {
+		protected override void ExecuteSelect(Vector3 pos) {
+			var worldPoint = Camera.ScreenToWorldPoint(pos);
+			var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
+
+			if (hit != null && !hit.CompareTag(BackgroundTag)) {
+				hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Began);
+			}
+		}
+
+		protected override void ExecuteSlide(Vector3 pos) {
 			var worldPoint = Camera.ScreenToWorldPoint(pos);
 			var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
 			if (hit != null) {
-				ExecuteTouch(hit.gameObject, hit.tag, worldPoint, touchPhase);
+				var button = hit.gameObject.GetComponent<IButton>();
+
+				if (((MonoBehaviour)UIManager.HitButton).gameObject != hit.gameObject) {
+					UIManager.HitButton.Operate(worldPoint, TouchPhase.Canceled);
+				}
+
+				else {
+					button.Operate(worldPoint, TouchPhase.Moved);
+				}
 			}
 		}
 
-		private void ExecuteTouch(GameObject go, string tag, Vector3 pos, TouchPhase touchPhase) {
-			switch (tag) {
-				case LevelsButtonTag:
-					go.GetComponent<LevelsButton>().Operate(pos, touchPhase);
-					break;
-				case PlayButtonTag:
-					go.GetComponent<PlayButton>().Operate(pos, touchPhase);
-					break;
-				case CloseButtonTag:
-					go.GetComponent<CloseButton>().Operate(pos, touchPhase);
-					break;
-				case LevelsPanelTag:
-					go.GetComponent<LevelsPanel>().Operate(pos, touchPhase);
-					break;
+		protected override void ExecuteTouch(Vector3 pos) {
+			var worldPoint = Camera.ScreenToWorldPoint(pos);
+			var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
+
+			if (hit != null && !hit.CompareTag(BackgroundTag)) {
+				hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Ended);
 			}
 		}
 	}

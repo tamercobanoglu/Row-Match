@@ -29,7 +29,7 @@ namespace Utils.Touch {
 
 			else if (UIManager.State == GameState.SelectionStarted) {
 				if (Input.GetMouseButton(0)) {
-					ExecuteSwipe(Input.mousePosition);
+					ExecuteSlide(Input.mousePosition);
 				}
 			}
 
@@ -52,7 +52,7 @@ namespace Utils.Touch {
 
             else if (UIManager.State == GameState.SelectionStarted) {
                 if (touch.phase == TouchPhase.Moved) {
-                    ExecuteSwipe(touch.position);
+                    ExecuteSlide(touch.position);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace Utils.Touch {
             }
         }
 
-        private void ExecuteSelect(Vector3 pos) {
+        protected override void ExecuteSelect(Vector3 pos) {
             var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
 
             if (hit != null) {
@@ -71,7 +71,7 @@ namespace Utils.Touch {
             }
         }
 
-        private void ExecuteSwipe(Vector3 pos) {
+        protected override void ExecuteSlide(Vector3 pos) {
             var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
 
             if (hit != null && GameBoard.HitItem.gameObject != hit.gameObject) {
@@ -79,7 +79,7 @@ namespace Utils.Touch {
             }
         }
 
-        private void ExecuteTouch(Vector3 pos) {
+        protected override void ExecuteTouch(Vector3 pos) {
             var worldPoint = Camera.ScreenToWorldPoint(pos);
             var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 

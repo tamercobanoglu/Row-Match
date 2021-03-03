@@ -48,6 +48,8 @@ namespace Game.UI.Menu {
 			particles = Instantiate(Particles, Icon.transform.position, Quaternion.identity, Icon.transform);
 
 			particles.Play();
+			LabelText.gameObject.SetActive(true);
+			HighScoreText.gameObject.SetActive(true);
 
 			var seq = DOTween.Sequence();
 			seq.Append(LabelText.transform.DOScale(Vector3.one, Properties.FadeOutDuration))

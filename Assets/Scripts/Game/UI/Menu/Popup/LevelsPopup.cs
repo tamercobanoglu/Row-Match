@@ -20,7 +20,7 @@ namespace Game.UI.Menu.Popup {
 			_uiManager = uiManager;
 			_levelCards = new LevelCard[UIMenu.AvailableLevels];
 
-			LevelsPanel.Prepare(_levelCards.Length);
+			LevelsPanel.Prepare(uiManager, _levelCards.Length);
 			FillLevelCardPanel(UIMenu.AvailableLevels, player.UnlockedLevels, player.Scores);
 		}
 
@@ -43,10 +43,6 @@ namespace Game.UI.Menu.Popup {
 		}
 
 		public void Disappear() {
-			/// [CLEAN]
-			_uiManager.LevelsButton.Image.color = Settings.Properties.ButtonColor;
-			_uiManager.LevelsButton.Image.transform.localScale = Vector3.one;
-
 			Transform.DOScale(Vector3.one * 0.8f, _animDuration);
 			gameObject.SetActive(false);
 

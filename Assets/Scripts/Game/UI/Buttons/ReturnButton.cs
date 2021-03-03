@@ -6,7 +6,7 @@ using DG.Tweening;
 namespace Game.UI.Buttons {
     public class ReturnButton : MonoBehaviour, IButton {
         public ButtonType ButtonType { get { return _buttonType; } }
-        public bool IsSelected { get { return _isSelected; } }
+        public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
         private ButtonType _buttonType = ButtonType.ReturnButton;
         private bool _isSelected = true;

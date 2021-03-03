@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
-using Game.UI.Buttons;
 using System.Collections;
+using Game.Mechanics;
+using Game.UI.Buttons;
 using DG.Tweening;
 
 namespace Game.UI.Menu.Popup {
 	public class LevelsPanel : MonoBehaviour, IButton {
 		public ButtonType ButtonType { get { return _buttonType; } }
-		public bool IsSelected { get { return _isSelected; } }
+		public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
 
 		private ButtonType _buttonType = ButtonType.LevelsPanel;
 		private bool _isSelected = true;
@@ -14,6 +15,7 @@ namespace Game.UI.Menu.Popup {
 		public Transform LevelsParent;
 		[HideInInspector] public float SlidingDuration;
 
+		private UIMenu _uiManager;
 		private Vector3 _pos;
 		private int _levelCount;
 		private float _offsetY, _basePosY, _topPosY, _instantPosY, _time;
@@ -21,17 +23,17 @@ namespace Game.UI.Menu.Popup {
 		[SerializeField] private float _acc = 1f;
 		[SerializeField] private float _maxSpeed = 50f;
 
-		public void Prepare(int levelCount) {
+		public void Prepare(UIMenu uiManager, int levelCount) {
 			SlidingDuration = 0.25f;
 
+			_uiManager = uiManager;
 			_levelCount = levelCount;
 			_basePosY = 3.5f;
 			_topPosY = CalculateTopYPos(_levelCount);
 		}
 
-		public void Operate(Vector3 pos, TouchPhase touchPase) {
-
-			switch (touchPase) {
+		public void Operate(Vector3 pos, TouchPhase touchPhase) {
+			switch (touchPhase) {
 				case TouchPhase.Began:
 					Selected(pos);
 					break;
@@ -52,10 +54,10 @@ namespace Game.UI.Menu.Popup {
 
 		public void Selected(Vector3 pos) {
 			_isSelected = true;
+			_uiManager.HitButton = this;
+			_uiManager.State = MenuState.SelectionStarted;
 
-			StopAllCoroutines();
-			_instantPosY = pos.y;
-			_offsetY = LevelsParent.position.y - pos.y;
+			SetParameters(pos);
 		}
 
 		public void Moved(Vector3 pos) {
@@ -91,13 +93,14 @@ namespace Game.UI.Menu.Popup {
 			}
 
 			_time = 0;
+			_uiManager.State = MenuState.None;
 			_isSelected = false;
 		}
 
 		public void Canceled(Vector3 pos) {
-			Released(pos);
+			if (!_isSelected) return;
 
-			_isSelected = false;
+			Released(pos);
 		}
 
 		IEnumerator Slide(float vel) {
@@ -149,6 +152,12 @@ namespace Game.UI.Menu.Popup {
 
 		public void SelfSlide(int levelIndex) {
 			LevelsParent.DOLocalMoveY(CalculateSelfSlidingPosY(levelIndex), SlidingDuration);
+		}
+
+		public void SetParameters(Vector3 pos) {
+			StopAllCoroutines();
+			_instantPosY = pos.y;
+			_offsetY = LevelsParent.position.y - pos.y;
 		}
 
 		#region Calculations
