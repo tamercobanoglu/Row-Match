@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b28236ab7dd544d8758c302cb4f47c, type: 3}
+  m_Name: Skin
+  m_EditorClassIdentifier: 
+  Red: {fileID: 21300000, guid: 20cfd0e32c0ef4b45afd80ea5ece13cf, type: 3}
+  Green: {fileID: 21300000, guid: 81538ea04d86bc44b8f350dd8317a240, type: 3}
+  Blue: {fileID: 21300000, guid: 2049cf4836ad03f4aa1df62ccc5c35ec, type: 3}
+  Yellow: {fileID: 21300000, guid: 9f99845992eea3346a17bd0f8e2098df, type: 3}
+  Tick: {fileID: 21300000, guid: 62fb1ff64b446444994e4b371856bf6b, type: 3}
+  Locked: {fileID: 21300000, guid: 1c1586b6dec345f41b3aa07b4a7cf7f0, type: 3}
+  Unlocked: {fileID: 21300000, guid: 9aed8009d400fb24990c68526d4a3879, type: 3}

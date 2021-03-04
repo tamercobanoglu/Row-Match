@@ -5,16 +5,16 @@ using Game.Gameplay.Item;
 
 namespace PlayerInfo {
     public class ScoreManager : MonoBehaviour {
+        private UIGameplay _uiManager;
+
         private int _score;
         private int _moveCount;
 
-        private UIGameplay _uiManager;
-
         public void Initialize(UIGameplay uiManager, int moveCount) {
+            _uiManager = uiManager;
+
             _score = 0;
             _moveCount = 10;
-
-            _uiManager = uiManager;
         }
 
         public void MoveSpent() {

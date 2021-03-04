@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Settings;
 using PlayerInfo;
 using DG.Tweening;
 
@@ -8,6 +9,7 @@ namespace Game.UI.Menu.Popup {
 		public LevelsPanel LevelsPanel;
 		public GameObject LevelCardPrefab;
 		public Transform Transform;
+		public Skin Skin;
 
 		private UIMenu _uiManager;
 		private float _animDuration;
@@ -30,7 +32,7 @@ namespace Game.UI.Menu.Popup {
 				newLevelCardGo.transform.localPosition = new Vector3(0, -2.25f * i, 0);
 
 				var newLevelCard = newLevelCardGo.GetComponent<LevelCard>();
-				newLevelCard.Prepare(_uiManager, _uiManager.LevelInfoPack.Levels[i], unlockedLevels, scores);
+				newLevelCard.Prepare(_uiManager, _uiManager.LevelInfoPack.Levels[i], Skin, unlockedLevels, scores);
 
 				_levelCards[i] = newLevelCard;
 			}

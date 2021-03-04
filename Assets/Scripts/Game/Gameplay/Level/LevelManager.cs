@@ -6,11 +6,11 @@ using Settings;
 namespace Game.Gameplay.Level {
 	public class LevelManager : MonoBehaviour {
 		public GameBoard GameBoard;
-		public ItemSkin ItemSkin;
+		public Skin Skin;
 
 		public void Initialize(int currentLevel, LevelInfo[] levels) {
-			ItemFactory.Prepare(ItemSkin);
-			GameBoard.Prepare(levels[currentLevel - 1], ItemSkin.Tick);
+			ItemFactory.Prepare(Skin);
+			GameBoard.Prepare(levels[currentLevel - 1], Skin.Tick);
 			PrepareLevel(levels[currentLevel - 1]);
 		}
 

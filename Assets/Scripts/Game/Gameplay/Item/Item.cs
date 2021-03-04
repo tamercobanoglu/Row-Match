@@ -18,7 +18,7 @@ namespace Game.Gameplay.Item {
 		public void Prepare(ItemType itemType, ItemBase itembase, Sprite sprite, int row, int col) {
 			SpriteRenderer = itembase.SpriteRenderer;
 			SpriteRenderer.sprite = sprite;
-			SpriteRenderer.size = Vector2.one * 0.8f;
+			SpriteRenderer.size = Vector2.one * 0.9f;
 
 			BoxCollider2D = itembase.BoxCollider2D;
 
@@ -33,7 +33,7 @@ namespace Game.Gameplay.Item {
 
 		public void Complete(Sprite matchSprite) {
 			SpriteRenderer.sprite = matchSprite;
-			SpriteRenderer.size = Vector2.one * 0.8f;
+			SpriteRenderer.size = Vector2.one * 0.9f;
 			BoxCollider2D.enabled = false;
 		}
 	}

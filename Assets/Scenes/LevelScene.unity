@@ -1367,7 +1367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameBoard: {fileID: 1034765219}
-  ItemSkin: {fileID: 11400000, guid: d1042395003dc9a43b39acbf75b95e99, type: 2}
+  Skin: {fileID: 11400000, guid: 6c81049acbb83214a9c55f5eb8a62682, type: 2}
 --- !u!1 &988220929
 GameObject:
   m_ObjectHideFlags: 0

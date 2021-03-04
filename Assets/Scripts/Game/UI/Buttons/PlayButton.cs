@@ -21,13 +21,18 @@ namespace Game.UI.Buttons {
 
         [SerializeField] private int _levelNum;
         private UIMenu _uiManager;
-        private float _animDuration;
+        private Skin _skin;
 
-        public void Prepare(UIManager uiManager, int levelNum, bool isUnlocked) {
-            _animDuration = 3.25f;
+        /// temp solution before masking out colliders
+        private float _topPosY, _bottomPosY;
 
+        public void Prepare(UIManager uiManager, Skin skin, int levelNum, bool isUnlocked) {
             _levelNum = levelNum;
             _uiManager = (UIMenu)uiManager;
+            _skin = skin;
+
+            _topPosY = 4.5f;
+            _bottomPosY = -6.75f;
 
             if (!isUnlocked) return;
 
@@ -36,31 +41,49 @@ namespace Game.UI.Buttons {
 
         private void Unlock() {
             Image.color = Properties.ButtonColor;
-            Icon.enabled = false;
             Text.enabled = true;
             BoxCollider2D.enabled = true;
+
+            Icon.enabled = false;
+            Icon.sprite = _skin.Unlocked;
+            Icon.size = Vector2.one * 0.8f;
         }
 
         public void LockTemp() {
             Image.color = Properties.LockedButtonColor;
-            Icon.enabled = true;
             Text.enabled = false;
             BoxCollider2D.enabled = false;
+
+            Icon.enabled = true;
+            Icon.sprite = _skin.Locked;
+            Icon.size = Vector2.one * 0.8f;
         }
 
         public IEnumerator Animate() {
-            AnimateUnlocking();
-            yield return new WaitForSeconds(_animDuration);
+            FirstAnimation();
+            yield return new WaitForSeconds(1.6f);
+
+            Icon.sprite = _skin.Unlocked;
+            Icon.size = Vector2.one * 0.8f;
+            yield return new WaitForSeconds(0.5f);
+
+            SecondAnimation();
+            yield return new WaitForSeconds(1.25f);
             Activate();
         }
 
-        private void AnimateUnlocking() {
+        private void FirstAnimation() {
             Text.transform.localScale = Vector3.one * 0.01f;
             Text.enabled = true;
 
             var seq = DOTween.Sequence();
-            seq.Append(Icon.transform.DOScale(Vector3.one * 3f, 2f))
-                .Append(Icon.transform.DOScale(Vector3.one * 0.01f, 0.5f))
+            seq.Append(Icon.transform.DOScale(Vector3.one * 3f, 1.5f))
+                .Append(Icon.transform.DOShakeRotation(0.1f));
+        }
+
+        private void SecondAnimation() {
+            var seq = DOTween.Sequence();
+            seq.Append(Icon.transform.DOScale(Vector3.one * 0.01f, 0.5f))
                 .Append(Text.transform.DOScale(Vector3.one, 0.25f))
                 .Append(Image.DOColor(Properties.ButtonColor, 0.5f));
         }
@@ -91,6 +114,8 @@ namespace Game.UI.Buttons {
         }
 
         public void Selected(Vector3 pos) {
+            if (!InsidePanel()) return;
+
             _isSelected = true;
             _uiManager.HitButton = this;
             _uiManager.State = MenuState.SelectionStarted;
@@ -139,6 +164,10 @@ namespace Game.UI.Buttons {
 
             _uiManager.State = MenuState.None;
             _isSelected = false;
+        }
+
+        private bool InsidePanel() {
+            return transform.position.y > _bottomPosY && transform.position.y < _topPosY;
         }
     }
 }

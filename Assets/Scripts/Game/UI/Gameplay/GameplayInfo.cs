@@ -40,12 +40,12 @@ namespace Game.UI.Gameplay {
             yield return new WaitForSeconds(_instructionDuration);
             HideInstructionText();
             yield return new WaitForSeconds(Properties.FadeOutDuration);
+            InstructionText.gameObject.SetActive(false);
         }
 
         public IEnumerator SecondAnimation() {
             BringGameInfo();
             yield return new WaitForSeconds(Properties.FadeOutDuration * 2);
-            InstructionText.gameObject.SetActive(false);
         }
 
         private void BringInstructionText() {

@@ -57,7 +57,9 @@ namespace Game.UI.Menu.Popup {
 			_uiManager.HitButton = this;
 			_uiManager.State = MenuState.SelectionStarted;
 
-			SetParameters(pos);
+			StopAllCoroutines();
+			_instantPosY = pos.y;
+			_offsetY = LevelsParent.position.y - pos.y;
 		}
 
 		public void Moved(Vector3 pos) {
@@ -152,12 +154,6 @@ namespace Game.UI.Menu.Popup {
 
 		public void SelfSlide(int levelIndex) {
 			LevelsParent.DOLocalMoveY(CalculateSelfSlidingPosY(levelIndex), SlidingDuration);
-		}
-
-		public void SetParameters(Vector3 pos) {
-			StopAllCoroutines();
-			_instantPosY = pos.y;
-			_offsetY = LevelsParent.position.y - pos.y;
 		}
 
 		#region Calculations

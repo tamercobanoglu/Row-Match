@@ -4,10 +4,10 @@ using Settings;
 namespace Game.Gameplay.Item {
 	public static class ItemFactory {
 		private static GameObject _itemBasePrefab;
-        private static ItemSkin _itemSkin;
+        private static Skin _skin;
 
-        public static void Prepare(ItemSkin itemSkin) {
-            _itemSkin = itemSkin;
+        public static void Prepare(Skin Skin) {
+            _skin = Skin;
         }
 
         public static Item CreateItem(ItemType itemType, Transform parent, int row, int col) {
@@ -29,16 +29,16 @@ namespace Game.Gameplay.Item {
 
 			switch (itemType) {
 				case ItemType.Red:
-					sprite = _itemSkin.Red;
+					sprite = _skin.Red;
 					break;
 				case ItemType.Green:
-					sprite = _itemSkin.Green;
+					sprite = _skin.Green;
 					break;
 				case ItemType.Blue:
-					sprite = _itemSkin.Blue;
+					sprite = _skin.Blue;
 					break;
 				case ItemType.Yellow:
-					sprite = _itemSkin.Yellow;
+					sprite = _skin.Yellow;
 					break;
 				default:
 					Debug.LogWarning($"Can not get skin for the item: {itemType}");
