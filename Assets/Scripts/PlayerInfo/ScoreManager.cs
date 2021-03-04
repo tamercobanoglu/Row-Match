@@ -14,7 +14,7 @@ namespace PlayerInfo {
             _uiManager = uiManager;
 
             _score = 0;
-            _moveCount = 10;
+            _moveCount = moveCount;
         }
 
         public void MoveSpent() {

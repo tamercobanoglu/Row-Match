@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 using Game.UI;
 using Game.Mechanics;
 using Game.Gameplay.Level;
@@ -69,16 +69,9 @@ namespace Game.Gameplay.Board {
 			SwapItems(HitItem, item);
 			yield return new WaitForSeconds(Properties.ItemSwapDuration);
 
+			ScoreManager.UpdateMoveCount();
 			/// check out the needed rows
-			if (CheckRows(HitItem, item)) {
-				ScoreManager.UpdateMoveCount();
-
-				yield return new WaitForSeconds(Rows[0].RowMatchDuration);
-			}
-
-			else {
-				ScoreManager.UpdateMoveCount();
-			}
+			yield return StartCoroutine(UpdateRowData(HitItem, item));
 
 			/// check move count
 			ScoreManager.MoveSpent();
@@ -96,18 +89,21 @@ namespace Game.Gameplay.Board {
 			item.transform.DOMove(hitItemPos, Properties.ItemSwapDuration);
 		}
 
-		private bool CheckRows(Item.Item hitItem, Item.Item item) {
+		IEnumerator UpdateRowData(Item.Item hitItem, Item.Item item) {
 			/// items swapped in the same row
 			if (hitItem.Row == item.Row) {
 				Rows[item.Row].UpdateRowData(hitItem.Column, item.Column);
-				return false;
+				yield break;
 			}
 
 			/// items swapped in the same column
-			var a = Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager);
-			var b = Rows[item.Row].UpdateRowData(item, ScoreManager);
+			if (Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager)) {
+				yield return new WaitForSeconds(Rows[hitItem.Row].RowMatchDuration);
+			}
 
-			return a || b;
+			if (Rows[item.Row].UpdateRowData(item, ScoreManager)) {
+				yield return new WaitForSeconds(Rows[hitItem.Row].RowMatchDuration);
+			}
 		}
 
 		public void DisableRows() {
