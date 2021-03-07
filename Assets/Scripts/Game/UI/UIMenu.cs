@@ -14,7 +14,7 @@ namespace Game.UI {
 		public LevelsPopup LevelsPopup;
 		public CelebrationPanel CelebrationPanel;
 
-		[HideInInspector] public MenuState State;
+		[HideInInspector] public GameState State;
 		[HideInInspector] public IButton HitButton = null;
 
 		///  set once when the app first launched
@@ -23,7 +23,7 @@ namespace Game.UI {
 		private static bool _firstInstall = true;
 
 		protected override void Awake() {
-			State = MenuState.None;
+			State = GameState.None;
 			SetScreen();
 
 			/// when the application is first opened
@@ -66,7 +66,7 @@ namespace Game.UI {
 		}
 
 		IEnumerator LoadingProcess() {
-			State = MenuState.Animating;
+			State = GameState.Animating;
 			Initialize();
 			LevelsButton.gameObject.SetActive(false);
 
@@ -100,7 +100,7 @@ namespace Game.UI {
 			}
 
 			LevelsButton.gameObject.SetActive(true);
-			State = MenuState.None;
+			State = GameState.None;
 		}
 
 		protected override void Initialize() {

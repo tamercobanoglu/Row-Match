@@ -3,14 +3,12 @@ using Game.UI;
 using Game.Mechanics;
 using Game.UI.Buttons;
 using Game.Gameplay.Item;
-using Game.Gameplay.Board;
 
 namespace Utils.Touch {
     public class TouchGameplay : TouchManager {
-        public UIGameplay UIManager;
-        public GameBoard GameBoard;
+        private const string ItemTag = "Item";
 
-        private const string ReturnButtonTag = "ReturnButton";
+        public UIGameplay UIManager;
 
         private void Update() {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -23,21 +21,19 @@ namespace Utils.Touch {
         protected override void GetTouchEditor() {
 			if (UIManager.State == GameState.None) {
                 if (Input.GetMouseButtonDown(0)) {
-					ExecuteSelect(Input.mousePosition);
+                    ExecuteSelect(Input.mousePosition);
 				}
 			}
 
 			else if (UIManager.State == GameState.SelectionStarted) {
 				if (Input.GetMouseButton(0)) {
-					ExecuteSlide(Input.mousePosition);
+                    ExecuteSlide(Input.mousePosition);
 				}
-			}
 
-			else if (UIManager.State == GameState.Ended) {
-				if (Input.GetMouseButtonUp(0)) {
-					ExecuteTouch(Input.mousePosition);
-				}
-			}
+                if (Input.GetMouseButtonUp(0)) {
+                    ExecuteTouch(Input.mousePosition);
+                }
+            }
 		}
 
         protected override void GetTouchMobile() {
@@ -54,9 +50,7 @@ namespace Utils.Touch {
                 if (touch.phase == TouchPhase.Moved) {
                     ExecuteSlide(touch.position);
                 }
-            }
 
-            else if (UIManager.State == GameState.Ended) {
                 if (touch.phase == TouchPhase.Ended) {
                     ExecuteTouch(touch.position);
                 }
@@ -64,18 +58,46 @@ namespace Utils.Touch {
         }
 
         protected override void ExecuteSelect(Vector3 pos) {
-            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
+            var worldPoint = Camera.ScreenToWorldPoint(pos);
+            var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
-            if (hit != null) {
-                GameBoard.ItemTapped(hit.gameObject.GetComponent<Item>());
+            if (hit != null && !hit.CompareTag(BackgroundTag)) {
+                if (hit.CompareTag(ItemTag)) {
+					if (!UIManager.GameStopped) {
+                        UIManager.LevelManager.GameBoard.ItemTapped(hit.gameObject.GetComponent<Item>());
+                    }
+                }
+
+                else {
+                    hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Began);
+                }
             }
         }
 
         protected override void ExecuteSlide(Vector3 pos) {
-            var hit = Physics2D.OverlapPoint(Camera.ScreenToWorldPoint(pos)) as BoxCollider2D;
+            var worldPoint = Camera.ScreenToWorldPoint(pos);
+            var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
-            if (hit != null && GameBoard.HitItem.gameObject != hit.gameObject) {
-                GameBoard.SwapAttempt(hit.gameObject.GetComponent<Item>());
+            if (hit != null) {
+				if (UIManager.HitButton == null) {
+					if (UIManager.LevelManager.GameBoard.HitItem.gameObject != hit.gameObject 
+                        && !UIManager.GameStopped
+                        && hit.CompareTag(ItemTag)) {
+                        UIManager.LevelManager.GameBoard.SwapAttempt(hit.gameObject.GetComponent<Item>());
+                    }
+				}
+
+                else {
+                    var button = hit.gameObject.GetComponent<IButton>();
+
+                    if (((MonoBehaviour)UIManager.HitButton).gameObject != hit.gameObject) {
+                        UIManager.HitButton.Operate(worldPoint, TouchPhase.Canceled);
+                    }
+
+                    else {
+                        button.Operate(worldPoint, TouchPhase.Moved);
+                    }
+                }
             }
         }
 
@@ -83,8 +105,10 @@ namespace Utils.Touch {
             var worldPoint = Camera.ScreenToWorldPoint(pos);
             var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
-            if (hit != null && hit.CompareTag(ReturnButtonTag)) {
-                hit.gameObject.GetComponent<ReturnButton>().Operate(worldPoint, TouchPhase.Ended);
+            if (hit != null 
+                && !hit.CompareTag(ItemTag)
+                && !hit.CompareTag(BackgroundTag)) {
+                hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Ended);
             }
         }
     }

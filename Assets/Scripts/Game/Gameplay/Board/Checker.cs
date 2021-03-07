@@ -3,12 +3,12 @@ using Settings;
 using PlayerInfo;
 
 namespace Game.Gameplay.Board {
-	public class Row {
+	public class Checker {
 		public float YPos { get { return _yPos; } }
 		public float BaseXPos { get { return _baseXPos; } }
 
 		public Item.Item[] Items = null;
-		public float RowMatchDuration;
+		public float MatchDuration;
 
 		private bool _isDisabled;
 		private float _yPos;
@@ -18,7 +18,7 @@ namespace Game.Gameplay.Board {
 
 		public void Prepare(float yPos, float baseXPos, int gridWidth, Sprite matchSprite) {
 			_itemMatchDuration = 0.1f;
-			RowMatchDuration = gridWidth * _itemMatchDuration;
+			MatchDuration = gridWidth * _itemMatchDuration;
 
 			_yPos = yPos;
 			_baseXPos = baseXPos;
@@ -28,20 +28,20 @@ namespace Game.Gameplay.Board {
 		}
 
 		/// for horizontally swapped ones
-		public void UpdateRowData(int col1, int col2) {
+		public void UpdateData(int col1, int col2) {
 			var temp = Items[col1];
 			Items[col1] = Items[col2];
 			Items[col2] = temp;
 		}
 
 		/// for vertically swapped ones
-		public bool UpdateRowData(Item.Item item, ScoreManager sm) {
+		public bool UpdateData(Item.Item item, ScoreManager sm) {
 			Items[item.Column] = item;
 
 			if (!IsCompleted()) 
 				return false;
 			
-			RowMatch(sm);
+			Match(sm);
 			return true;
 		}
 
@@ -54,10 +54,10 @@ namespace Game.Gameplay.Board {
 			return true;
 		}
 
-		private void RowMatch(ScoreManager sm) {
+		private void Match(ScoreManager sm) {
 			_isDisabled = true;
 
-			sm.RowMatch(Items, Properties.PointsArray[(int)Items[0].ItemType - 1], _itemMatchDuration, _matchSprite);
+			sm.Match(Items, Properties.PointsArray[(int)Items[0].ItemType - 1], _itemMatchDuration, _matchSprite);
 		}
 
 		public void Disable() {

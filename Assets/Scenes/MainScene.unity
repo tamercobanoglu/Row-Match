@@ -240,12 +240,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 186788011}
-  - component: {fileID: 186788014}
   - component: {fileID: 186788013}
   - component: {fileID: 186788012}
   m_Layer: 0
   m_Name: Background
-  m_TagString: Untagged
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -340,18 +339,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 20, y: 30}
   m_EdgeRadius: 0
---- !u!114 &186788014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186788010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8688bb6ee577c6e4babe1c2fbdd15c31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &197096933
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1063,7 @@ GameObject:
   - component: {fileID: 719570927}
   m_Layer: 0
   m_Name: Levels Button
-  m_TagString: LevelsButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1119,6 +1106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9663133ef95841d45bbced5053dab00c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonType: 0
   UIManager: {fileID: 1690314291}
   Image: {fileID: 197096935}
 --- !u!4 &719570929
@@ -1150,7 +1138,7 @@ GameObject:
   - component: {fileID: 753731808}
   m_Layer: 0
   m_Name: Levels Panel
-  m_TagString: LevelsPanel
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1187,6 +1175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721034fa1d4ab55439c35d7e79f9faed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonType: 1
   LevelsParent: {fileID: 51937323}
   SlidingDuration: 0
   _acc: 1
@@ -1681,7 +1670,7 @@ GameObject:
   - component: {fileID: 1063260143}
   m_Layer: 0
   m_Name: Background
-  m_TagString: CloseButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1738,6 +1727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a43ecaf9caa58e4aa255ed596129c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonType: 3
   UIManager: {fileID: 1690314291}
   IsIcon: 0
 --- !u!1 &1237909095
@@ -2359,7 +2349,7 @@ GameObject:
   - component: {fileID: 1619241021}
   m_Layer: 0
   m_Name: Close Button
-  m_TagString: CloseButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2417,6 +2407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a43ecaf9caa58e4aa255ed596129c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonType: 3
   UIManager: {fileID: 1690314291}
   IsIcon: 1
 --- !u!1 &1690314290

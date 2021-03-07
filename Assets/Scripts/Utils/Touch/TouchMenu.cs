@@ -2,16 +2,9 @@
 using Game.UI;
 using Game.Mechanics;
 using Game.UI.Buttons;
-using Game.UI.Menu.Popup;
 
 namespace Utils.Touch {
 	public class TouchMenu : TouchManager {
-		private const string LevelsButtonTag = "LevelsButton";
-		private const string PlayButtonTag = "PlayButton";
-		private const string CloseButtonTag = "CloseButton";
-		private const string LevelsPanelTag = "LevelsPanel";
-		private const string BackgroundTag = "Background";
-
 		public UIMenu UIManager;
 
 		private void Update() {
@@ -23,13 +16,13 @@ namespace Utils.Touch {
 		}
 
 		protected override void GetTouchEditor() {
-			if (UIManager.State == MenuState.None) {
+			if (UIManager.State == GameState.None) {
 				if (Input.GetMouseButtonDown(0)) {
 					ExecuteSelect(Input.mousePosition);
 				}
 			}
 
-			else if (UIManager.State == MenuState.SelectionStarted) {
+			else if (UIManager.State == GameState.SelectionStarted) {
 				if (Input.GetMouseButton(0)) {
 					ExecuteSlide(Input.mousePosition);
 				}
@@ -44,13 +37,13 @@ namespace Utils.Touch {
 			if (Input.touchCount <= 0) return;
 			var touch = Input.GetTouch(0);
 
-			if (UIManager.State == MenuState.None) {
+			if (UIManager.State == GameState.None) {
 				if (touch.phase == TouchPhase.Began) {
 					ExecuteSelect(touch.position);
 				}
 			}
 
-			else if (UIManager.State == MenuState.SelectionStarted) {
+			else if (UIManager.State == GameState.SelectionStarted) {
 				if (touch.phase == TouchPhase.Moved) {
 					ExecuteSlide(touch.position);
 				}
@@ -91,7 +84,7 @@ namespace Utils.Touch {
 			var worldPoint = Camera.ScreenToWorldPoint(pos);
 			var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
-			if (hit != null && !hit.CompareTag(BackgroundTag)) {
+			if (hit != null) {
 				hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Ended);
 			}
 		}

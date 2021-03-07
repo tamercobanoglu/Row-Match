@@ -17,7 +17,7 @@ namespace Game.Gameplay.Level {
 		private void PrepareLevel(LevelInfo levelInfo) {
 			for (int i = 0; i < levelInfo.GridHeight; i++) {
 
-				var row = GameBoard.Rows[i];
+				var row = GameBoard.Checkers[i];
 
 				for (int j = 0; j < levelInfo.GridWidth; j++) {
 

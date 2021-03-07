@@ -3,6 +3,7 @@
 namespace Utils.Touch {
     public abstract class TouchManager : MonoBehaviour {
         public Camera Camera;
+        protected const string BackgroundTag = "Background";
 
         protected abstract void GetTouchEditor();
         protected abstract void GetTouchMobile();

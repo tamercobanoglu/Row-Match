@@ -1,21 +1,25 @@
-﻿using Game.Gameplay.Level;
+﻿using UnityEngine;
+using System.Collections;
+using Game.Mechanics;
+using Game.UI.Buttons;
 using Game.UI.Gameplay;
+using Game.UI.Menu.Popup;
+using Game.Gameplay.Level;
 using Settings;
 using PlayerInfo;
-using System.Collections;
-using UnityEngine;
-using Game.UI.Buttons;
-using Game.Mechanics;
 
 namespace Game.UI {
     public class UIGameplay : UIManager {
         public ScoreManager ScoreManager;
-        public GameplayInfo GameplayInfo;
-        public MessagePanel MessagePanel;
+        public ChoicePanel ChoicePanel;
         public ReturnButton ReturnButton;
+        public GameplayInfo GameplayInfo;
+        public OutcomePanel OutcomePanel;
         public LevelManager LevelManager;
 
         [HideInInspector] public GameState State;
+        [HideInInspector] public IButton HitButton = null;
+        [HideInInspector] public bool GameStopped = false;
         [SerializeField] private int _currentLevel;
 
         protected override void Awake() {
@@ -32,6 +36,7 @@ namespace Game.UI {
             GameplayInfo.Initialize(Player.Instance.Scores, _currentLevel, LevelInfoPack.Levels);
             LevelManager.Initialize(_currentLevel, LevelInfoPack.Levels);
             ScoreManager.Initialize(this, LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
+            ReturnButton.Initialize();
 
             Fade(FadeType.In);
         }
@@ -43,17 +48,16 @@ namespace Game.UI {
         }
 
         IEnumerator EndingProcess() {
-            LevelManager.GameBoard.DisableRows();
+            LevelManager.GameBoard.DisableCheckers();
             yield return new WaitForSeconds(0.3f);
 
-            LevelManager.GameBoard.EndGame();
-            MessagePanel.Display();
+            OutcomePanel.Display();
             yield return new WaitForSeconds(1.6f);
 
-            ReturnButton.PopupText();
+            OutcomePanel.ReturnButton.PopupText();
         }
 
-        private void UpdatePlayer(int score) {
+        public void UpdatePlayer(int score) {
             Player.Instance.UpdatePlayer(score);
         }
 
@@ -65,10 +69,20 @@ namespace Game.UI {
             Fade(0.65f, Properties.FadeOutDuration);
             yield return StartCoroutine(GameplayInfo.FirstAnimation());
 
+            ReturnButton.BringButton();
+
             Fade(0f, Properties.FadeOutDuration * 2);
             yield return StartCoroutine(GameplayInfo.SecondAnimation());
 
             State = GameState.None;
+        }
+
+        /// controls the activation of buttons in the background
+        /// when the choice panel is activated / deactivated
+        public void RearButtonsActivation(bool isActive) {
+            GameStopped = !isActive;
+
+            ReturnButton.Collider.enabled = isActive;
         }
     }
 }

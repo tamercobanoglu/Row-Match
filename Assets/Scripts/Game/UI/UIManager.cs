@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using Utils;
-using DG.Tweening;
-using Settings;
-using PlayerInfo;
 using Game.Gameplay.Level;
+using Utils;
+using Settings;
+using DG.Tweening;
 
 namespace Game.UI {
     public abstract class UIManager : MonoBehaviour {

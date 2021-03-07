@@ -15,7 +15,7 @@ namespace Game.Gameplay.Board {
 		public SpriteRenderer BoardRenderer;
 		public Transform ItemsParent;
 
-		[HideInInspector] public Row[] Rows = null;
+		[HideInInspector] public Checker[] Checkers = null;
 		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
@@ -36,13 +36,13 @@ namespace Game.Gameplay.Board {
 			var baseYPos = -(float)_height / 2 + 0.5f;
 			var baseXPos = -(float)_width / 2 + 0.5f;
 
-			Rows = new Row[_height];
+			Checkers = new Checker[_height];
 
 			for (int i = 0; i < _height; i++) {
-				var row = new Row();
+				var row = new Checker();
 				row.Prepare(baseYPos + i, baseXPos, _width, _matchSprite);
 
-				Rows[i] = row;
+				Checkers[i] = row;
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace Game.Gameplay.Board {
 
 			ScoreManager.UpdateMoveCount();
 			/// check out the needed rows
-			yield return StartCoroutine(UpdateRowData(HitItem, item));
+			yield return StartCoroutine(UpdateData(HitItem, item));
 
 			/// check move count
 			ScoreManager.MoveSpent();
@@ -89,31 +89,27 @@ namespace Game.Gameplay.Board {
 			item.transform.DOMove(hitItemPos, Properties.ItemSwapDuration);
 		}
 
-		IEnumerator UpdateRowData(Item.Item hitItem, Item.Item item) {
+		IEnumerator UpdateData(Item.Item hitItem, Item.Item item) {
 			/// items swapped in the same row
 			if (hitItem.Row == item.Row) {
-				Rows[item.Row].UpdateRowData(hitItem.Column, item.Column);
+				Checkers[item.Row].UpdateData(hitItem.Column, item.Column);
 				yield break;
 			}
 
 			/// items swapped in the same column
-			if (Rows[hitItem.Row].UpdateRowData(hitItem, ScoreManager)) {
-				yield return new WaitForSeconds(Rows[hitItem.Row].RowMatchDuration);
+			if (Checkers[hitItem.Row].UpdateData(hitItem, ScoreManager)) {
+				yield return new WaitForSeconds(Checkers[hitItem.Row].MatchDuration);
 			}
 
-			if (Rows[item.Row].UpdateRowData(item, ScoreManager)) {
-				yield return new WaitForSeconds(Rows[hitItem.Row].RowMatchDuration);
-			}
-		}
-
-		public void DisableRows() {
-			for (int i = 0; i < Rows.Length; i++) {
-				Rows[i].Disable();
+			if (Checkers[item.Row].UpdateData(item, ScoreManager)) {
+				yield return new WaitForSeconds(Checkers[hitItem.Row].MatchDuration);
 			}
 		}
 
-		public void EndGame() {
-			UIManager.State = GameState.Ended;
+		public void DisableCheckers() {
+			for (int i = 0; i < Checkers.Length; i++) {
+				Checkers[i].Disable();
+			}
 		}
 	}
 }

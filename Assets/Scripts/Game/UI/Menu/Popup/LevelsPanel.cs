@@ -6,12 +6,10 @@ using DG.Tweening;
 
 namespace Game.UI.Menu.Popup {
 	public class LevelsPanel : MonoBehaviour, IButton {
-		public ButtonType ButtonType { get { return _buttonType; } }
 		public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
-
-		private ButtonType _buttonType = ButtonType.LevelsPanel;
 		private bool _isSelected = true;
 
+		public ButtonType ButtonType;
 		public Transform LevelsParent;
 		[HideInInspector] public float SlidingDuration;
 
@@ -55,7 +53,7 @@ namespace Game.UI.Menu.Popup {
 		public void Selected(Vector3 pos) {
 			_isSelected = true;
 			_uiManager.HitButton = this;
-			_uiManager.State = MenuState.SelectionStarted;
+			_uiManager.State = GameState.SelectionStarted;
 
 			StopAllCoroutines();
 			_instantPosY = pos.y;
@@ -90,12 +88,13 @@ namespace Game.UI.Menu.Popup {
 			if (_time != 0) {
 				StartCoroutine(Slide((pos.y - _instantPosY) / _time));
 			}
-			else if(_time == 0 && OutOfBounds()) {
+			else if (_time == 0 && OutOfBounds()) {
 				StartCoroutine(Return(pos.y - _instantPosY > 0 ? LimitPosType.Top : LimitPosType.Base));
 			}
 
 			_time = 0;
-			_uiManager.State = MenuState.None;
+			_uiManager.State = GameState.None;
+
 			_isSelected = false;
 		}
 

@@ -8,12 +8,10 @@ using DG.Tweening;
 
 namespace Game.UI.Buttons {
 	public class PlayButton : MonoBehaviour, IButton {
-        public ButtonType ButtonType { get { return _buttonType; } }
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
-
-        private ButtonType _buttonType = ButtonType.PlayButton;
         private bool _isSelected;
 
+        public ButtonType ButtonType;
         public SpriteRenderer Image;
         public SpriteRenderer Icon;
         public MeshRenderer Text;
@@ -118,7 +116,7 @@ namespace Game.UI.Buttons {
 
             _isSelected = true;
             _uiManager.HitButton = this;
-            _uiManager.State = MenuState.SelectionStarted;
+            _uiManager.State = GameState.SelectionStarted;
 
             Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
@@ -152,7 +150,7 @@ namespace Game.UI.Buttons {
             Player.Instance.CurrentLevel = _levelNum;
             _uiManager.SceneLoader.LoadScene(SceneType.LevelScene);
 
-            _uiManager.State = MenuState.None;
+            _uiManager.State = GameState.None;
             _isSelected = false;
         }
 
@@ -162,7 +160,7 @@ namespace Game.UI.Buttons {
             Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
-            _uiManager.State = MenuState.None;
+            _uiManager.State = GameState.None;
             _isSelected = false;
         }
 

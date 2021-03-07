@@ -28,7 +28,7 @@ namespace PlayerInfo {
             _uiManager.GameplayInfo.UpdateMoveCountText(_moveCount);
         }
 
-        public void RowMatch(Item[] items, int pointPerItem, float itemMatchDuration, Sprite matchSprite) {
+        public void Match(Item[] items, int pointPerItem, float itemMatchDuration, Sprite matchSprite) {
             StartCoroutine(MatchingProcess(items, pointPerItem, items.Length, itemMatchDuration, matchSprite));
         }
 
@@ -53,4 +53,3 @@ namespace PlayerInfo {
         }
     }
 }
-

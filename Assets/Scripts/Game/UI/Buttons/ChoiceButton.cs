@@ -1,19 +1,24 @@
 ﻿using UnityEngine;
-using Settings;
 using Game.Mechanics;
+using Game.UI.Menu.Popup;
+using Settings;
 using DG.Tweening;
+using TMPro;
 
 namespace Game.UI.Buttons {
-    public class CloseButton : MonoBehaviour, IButton {
+    public class ChoiceButton : MonoBehaviour, IButton {
         public bool IsSelected { get { return _isSelected; } set { _isSelected = value; } }
-        private bool _isSelected;
+        private bool _isSelected = true;
 
         public ButtonType ButtonType;
-        public UIMenu UIManager;
-        public bool IsIcon;
+        public ChoiceType ChoiceType;
+        public UIGameplay UIManager;
+        public SpriteRenderer Image;
+        public TextMeshPro Text;
 
-        public void Operate(Vector3 pos, TouchPhase touchPhase) {
-            switch (touchPhase) {
+        public void Operate(Vector3 pos, TouchPhase touchPase) {
+
+            switch (touchPase) {
                 case TouchPhase.Began:
                     Selected(pos);
                     break;
@@ -37,9 +42,8 @@ namespace Game.UI.Buttons {
             UIManager.HitButton = this;
             UIManager.State = GameState.SelectionStarted;
 
-			if (IsIcon) {
-                transform.DOScale(Vector3.one * 0.9f, Properties.ButtonAnimDuration);
-            }
+            Image.DOColor(Properties.PressedChoiceButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
         }
 
         public void Moved(Vector3 pos) {
@@ -53,12 +57,12 @@ namespace Game.UI.Buttons {
         public void Released(Vector3 pos) {
             if (!_isSelected) return;
 
-            if (IsIcon) {
-                transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
-            }
+            Image.DOColor(Properties.ChoiceButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
-            UIManager.LevelsPopup.Disappear();
+            Execute(ChoiceType);
 
+            UIManager.HitButton = null;
             UIManager.State = GameState.None;
             _isSelected = false;
         }
@@ -66,12 +70,22 @@ namespace Game.UI.Buttons {
         public void Canceled(Vector3 pos) {
             if (!_isSelected) return;
 
-            if (IsIcon) {
-                transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
-            }
+            Image.DOColor(Properties.ChoiceButtonColor, Properties.ButtonAnimDuration);
+            transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
+            UIManager.HitButton = null;
             UIManager.State = GameState.None;
             _isSelected = false;
+        }
+
+        public void Execute(ChoiceType ct) {
+            if (ct == ChoiceType.Option1) {
+                UIManager.ChoicePanel.FirstOptionSelected();
+            }
+
+            else {
+                UIManager.ChoicePanel.SecondOptionSelected();
+            }
         }
     }
 }

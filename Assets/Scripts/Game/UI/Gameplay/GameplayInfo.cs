@@ -16,15 +16,19 @@ namespace Game.UI.Gameplay {
         public TextMeshPro HighestScoreText;
         public TextMeshPro MoveCountText;
         public TextMeshPro ScoreText;
-        public Transform InstructionText;
+        public TextMeshPro InstructionText;
 
         private float _instructionDuration;
+        private string _instructionText;
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
             _instructionDuration = 2f;
+            _instructionText = "Match the rows!";
 
             HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();
+
+            InstructionText.text = _instructionText;
         }
 
         public void UpdateScoreText(int score) {
@@ -52,12 +56,12 @@ namespace Game.UI.Gameplay {
             InstructionText.gameObject.SetActive(true);
 
             var seq = DOTween.Sequence();
-            seq.Append(InstructionText.DOScale(Vector3.one, Properties.FadeOutDuration))
-                .Append(InstructionText.DOMoveY(InstructionText.position.y + 0.4f, 1.75f));
+            seq.Append(InstructionText.transform.DOScale(Vector3.one, Properties.FadeOutDuration))
+                .Append(InstructionText.transform.DOMoveY(InstructionText.transform.position.y + 0.4f, 1.75f));
         }
 
         private void HideInstructionText() {
-            InstructionText.DOScale(Vector3.one * 0.01f, Properties.FadeOutDuration);
+            InstructionText.transform.DOScale(Vector3.one * 0.01f, Properties.FadeOutDuration);
         }
 
         private void BringGameInfo() {

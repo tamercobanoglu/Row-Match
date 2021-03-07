@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 554014147616237788}
   m_Layer: 0
   m_Name: Play Button
-  m_TagString: PlayButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95bac284d6446f478dc5e9071a90bb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ButtonType: 2
   Image: {fileID: 6971424560382012921}
   Icon: {fileID: 62812840100658469}
   Text: {fileID: 7613265095683491461}

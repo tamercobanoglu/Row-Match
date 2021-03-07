@@ -2,7 +2,6 @@
 
 namespace Game.UI.Buttons {
 	public interface IButton {
-		ButtonType ButtonType { get; }
 		bool IsSelected { get; set; }
 
 		void Operate(Vector3 pos, TouchPhase touchPase);
@@ -19,6 +18,6 @@ namespace Game.UI.Buttons {
 		PlayButton,
 		CloseButton,
 		ReturnButton,
-		Background
+		ChoiceButton
 	}
 }

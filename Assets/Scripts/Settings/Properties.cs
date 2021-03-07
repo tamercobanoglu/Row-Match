@@ -15,6 +15,10 @@ namespace Settings {
         public static readonly Color32 LockedButtonColor = new Color32(140, 140, 140, 255);
         public static readonly Color32 PressedButtonColor = new Color32(76, 121, 53, 255);
 
+        /// for choice panel buttons
+        public static readonly Color32 ChoiceButtonColor = new Color32(159, 95, 0, 255);
+        public static readonly Color32 PressedChoiceButtonColor = new Color32(111, 66, 2, 255);
+
         public static readonly int FirstInstallAvailableLevels = 10;
     }
 }
