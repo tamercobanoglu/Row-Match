@@ -4,39 +4,39 @@ using PlayerInfo;
 
 namespace Game.Gameplay.Board {
 	public class Checker {
-		public float YPos { get { return _yPos; } }
-		public float BaseXPos { get { return _baseXPos; } }
+		public float YPos { get { return _pos; } }
+		public float BaseXPos { get { return _basePos; } }
 
 		public Item.Item[] Items = null;
 		public float MatchDuration;
 
 		private bool _isDisabled;
-		private float _yPos;
-		private float _baseXPos;
-		private Sprite _matchSprite;
+		private float _pos;
+		private float _basePos;
 		private float _itemMatchDuration;
+		private Sprite _matchSprite;
 
-		public void Prepare(float yPos, float baseXPos, int gridWidth, Sprite matchSprite) {
+		public void Prepare(float pos, float basePos, int itemCount, Sprite matchSprite) {
 			_itemMatchDuration = 0.1f;
-			MatchDuration = gridWidth * _itemMatchDuration;
+			MatchDuration = itemCount * _itemMatchDuration;
 
-			_yPos = yPos;
-			_baseXPos = baseXPos;
+			_pos = pos;
+			_basePos = basePos;
 			_matchSprite = matchSprite;
 
-			Items = new Item.Item[gridWidth];
+			Items = new Item.Item[itemCount];
 		}
 
 		/// for horizontally swapped ones
-		public void UpdateData(int col1, int col2) {
-			var temp = Items[col1];
-			Items[col1] = Items[col2];
-			Items[col2] = temp;
+		public void UpdateData(int index1, int index2) {
+			var temp = Items[index1];
+			Items[index1] = Items[index2];
+			Items[index2] = temp;
 		}
 
 		/// for vertically swapped ones
 		public bool UpdateData(Item.Item item, ScoreManager sm) {
-			Items[item.Column] = item;
+			Items[Properties.isRowMatch ? item.Column : item.Row] = item;
 
 			if (!IsCompleted()) 
 				return false;

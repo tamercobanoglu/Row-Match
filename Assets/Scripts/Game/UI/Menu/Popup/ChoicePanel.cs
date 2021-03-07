@@ -34,7 +34,7 @@ namespace Game.UI.Menu.Popup {
 			UIManager.RearButtonsActivation(false);
 			gameObject.SetActive(true);
 
-			Background.DOFade(0.65f, Properties.FadeOutDuration);
+			Background.DOFade(0.75f, Properties.FadeOutDuration);
 			transform.DOScale(Vector3.one, Properties.FadeOutDuration);
 		}
 

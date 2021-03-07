@@ -7,6 +7,9 @@ using TMPro;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
+        private const string RowsInstruction = "Match the rows!";
+        private const string ColumnsInstruction = "Match the columns!";
+
         [Header("Parents")]
         public Transform HighestScoreTransform;
         public Transform MoveCountTransform;
@@ -23,7 +26,7 @@ namespace Game.UI.Gameplay {
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
             _instructionDuration = 2f;
-            _instructionText = "Match the rows!";
+            _instructionText = Properties.isRowMatch ? RowsInstruction : ColumnsInstruction;
 
             HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();

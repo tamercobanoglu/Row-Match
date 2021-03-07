@@ -16,6 +16,7 @@ namespace Game.Gameplay.Board {
 		public Transform ItemsParent;
 
 		[HideInInspector] public Checker[] Checkers = null;
+		[HideInInspector] public Checker[] Rows = null;
 		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
@@ -29,20 +30,54 @@ namespace Game.Gameplay.Board {
 
 			BoardRenderer.size = new Vector2(_width + 0.2f, _height + 0.2f);
 
+			CreateCheckers();
 			CreateRows();
+		}
+
+		private void CreateCheckers() {
+			var baseYPos = -(float)_height / 2 + 0.5f;
+			var baseXPos = -(float)_width / 2 + 0.5f;
+
+			int checkerCount, itemCount;
+			float pos, basePos;
+
+			#region arrange parameters
+			if (Properties.isRowMatch) {
+				checkerCount = _height;
+				itemCount = _width;
+				pos = baseYPos;
+				basePos = baseXPos;
+			}
+
+			else {
+				checkerCount = _width;
+				itemCount = _height;
+				pos = baseXPos;
+				basePos = baseYPos;
+			}
+			#endregion
+
+			Checkers = new Checker[checkerCount];
+
+			for (int i = 0; i < checkerCount; i++) {
+				var checker = new Checker();
+				checker.Prepare(pos + i, basePos, itemCount, _matchSprite);
+
+				Checkers[i] = checker;
+			}
 		}
 
 		private void CreateRows() {
 			var baseYPos = -(float)_height / 2 + 0.5f;
 			var baseXPos = -(float)_width / 2 + 0.5f;
 
-			Checkers = new Checker[_height];
+			Rows = new Checker[_height];
 
 			for (int i = 0; i < _height; i++) {
 				var row = new Checker();
 				row.Prepare(baseYPos + i, baseXPos, _width, _matchSprite);
 
-				Checkers[i] = row;
+				Rows[i] = row;
 			}
 		}
 
@@ -90,20 +125,26 @@ namespace Game.Gameplay.Board {
 		}
 
 		IEnumerator UpdateData(Item.Item hitItem, Item.Item item) {
-			/// items swapped in the same row
-			if (hitItem.Row == item.Row) {
-				Checkers[item.Row].UpdateData(hitItem.Column, item.Column);
+			/// items swapped in the same row or opposite
+			if (GetData(hitItem, true) == GetData(item, true)) {
+				Checkers[GetData(item, true)].UpdateData(GetData(hitItem, false), GetData(item, false));
 				yield break;
 			}
 
-			/// items swapped in the same column
-			if (Checkers[hitItem.Row].UpdateData(hitItem, ScoreManager)) {
-				yield return new WaitForSeconds(Checkers[hitItem.Row].MatchDuration);
+			/// items swapped in the same column or opposite
+			if (Checkers[GetData(hitItem, true)].UpdateData(hitItem, ScoreManager)) {
+				yield return new WaitForSeconds(Checkers[GetData(hitItem, true)].MatchDuration);
 			}
 
-			if (Checkers[item.Row].UpdateData(item, ScoreManager)) {
-				yield return new WaitForSeconds(Checkers[hitItem.Row].MatchDuration);
+			if (Checkers[GetData(item, true)].UpdateData(item, ScoreManager)) {
+				yield return new WaitForSeconds(Checkers[GetData(item, true)].MatchDuration);
 			}
+		}
+
+		private int GetData(Item.Item item, bool groupData) {
+			return Properties.isRowMatch ? 
+				groupData ? item.Row : item.Column : 
+				groupData ? item.Column : item.Row;
 		}
 
 		public void DisableCheckers() {

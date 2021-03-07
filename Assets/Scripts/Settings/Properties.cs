@@ -20,5 +20,8 @@ namespace Settings {
         public static readonly Color32 PressedChoiceButtonColor = new Color32(111, 66, 2, 255);
 
         public static readonly int FirstInstallAvailableLevels = 10;
+
+        /// temp
+        public static bool isRowMatch = false;
     }
 }
