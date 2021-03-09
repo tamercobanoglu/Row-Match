@@ -10,6 +10,7 @@ using PlayerInfo;
 namespace Game.UI {
 	public class UIMenu : UIManager {
 		public Player Player;
+		public MatchTypeButton MatchTypeButton;
 		public LevelsButton LevelsButton;
 		public LevelsPopup LevelsPopup;
 		public CelebrationPanel CelebrationPanel;
@@ -68,6 +69,7 @@ namespace Game.UI {
 		IEnumerator LoadingProcess() {
 			State = GameState.Animating;
 			Initialize();
+			MatchTypeButton.gameObject.SetActive(false);
 			LevelsButton.gameObject.SetActive(false);
 
 			Fade(FadeType.In);
@@ -99,11 +101,13 @@ namespace Game.UI {
 				}
 			}
 
+			MatchTypeButton.gameObject.SetActive(true);
 			LevelsButton.gameObject.SetActive(true);
 			State = GameState.None;
 		}
 
 		protected override void Initialize() {
+			MatchTypeButton.Initialize(this, Player.Instance.IsRowMatch);
 			LevelsPopup.Initialize(this, Player.Instance);
 		}
 	}

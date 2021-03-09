@@ -34,7 +34,7 @@ namespace Game.UI {
             _currentLevel = Player.Instance.CurrentLevel;
 
             GameplayInfo.Initialize(Player.Instance.Scores, _currentLevel, LevelInfoPack.Levels);
-            LevelManager.Initialize(_currentLevel, LevelInfoPack.Levels);
+            LevelManager.Initialize(this, _currentLevel, LevelInfoPack.Levels);
             ScoreManager.Initialize(this, LevelInfoPack.Levels[_currentLevel - 1].MoveCount);
             ReturnButton.Initialize();
 

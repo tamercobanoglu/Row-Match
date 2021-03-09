@@ -19,3 +19,5 @@ MonoBehaviour:
   Tick: {fileID: 21300000, guid: 62fb1ff64b446444994e4b371856bf6b, type: 3}
   Locked: {fileID: 21300000, guid: 1c1586b6dec345f41b3aa07b4a7cf7f0, type: 3}
   Unlocked: {fileID: 21300000, guid: 9aed8009d400fb24990c68526d4a3879, type: 3}
+  RowMatchIcon: {fileID: 21300000, guid: cdece87d9b1e6da4bad8a74b81bb4956, type: 3}
+  ColumnMatchIcon: {fileID: 21300000, guid: 072c8f96a8da91e4a95bfbfb5c91a2a5, type: 3}

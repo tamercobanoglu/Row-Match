@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
+using Game.UI;
 using Game.Gameplay.Item;
 using Game.Gameplay.Board;
-using Settings;
+using PlayerInfo;
 
 namespace Game.Gameplay.Level {
 	public class LevelManager : MonoBehaviour {
 		public GameBoard GameBoard;
-		public Skin Skin;
 
-		public void Initialize(int currentLevel, LevelInfo[] levels) {
-			ItemFactory.Prepare(Skin);
-			GameBoard.Prepare(levels[currentLevel - 1], Skin.Tick);
+		private UIGameplay _uiManager;
+
+		public void Initialize(UIGameplay uiManager, int currentLevel, LevelInfo[] levels) {
+			_uiManager = uiManager;
+
+			ItemFactory.Prepare(_uiManager.Skin);
+			GameBoard.Prepare(levels[currentLevel - 1], _uiManager.Skin.Tick);
 			PrepareLevel(levels[currentLevel - 1]);
 		}
 
@@ -32,12 +36,12 @@ namespace Game.Gameplay.Level {
 					if (item == null) continue;
 
 					row.Items[j] = item;
-					if (Properties.isRowMatch) checker.Items[j] = item;
-					item.transform.position = new Vector3(row.BaseXPos + j, row.YPos, 0);
+					if (Player.Instance.IsRowMatch) checker.Items[j] = item;
+					item.transform.position = new Vector3(row.BasePos + j, row.Pos, 0);
 				}
 			}
 
-			if (!Properties.isRowMatch) {
+			if (!Player.Instance.IsRowMatch) {
 				for (int i = 0; i < levelInfo.GridWidth; i++) {
 
 					var Rows = GameBoard.Rows;

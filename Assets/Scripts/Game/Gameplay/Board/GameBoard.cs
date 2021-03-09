@@ -42,7 +42,7 @@ namespace Game.Gameplay.Board {
 			float pos, basePos;
 
 			#region arrange parameters
-			if (Properties.isRowMatch) {
+			if (Player.Instance.IsRowMatch) {
 				checkerCount = _height;
 				itemCount = _width;
 				pos = baseYPos;
@@ -142,7 +142,7 @@ namespace Game.Gameplay.Board {
 		}
 
 		private int GetData(Item.Item item, bool groupData) {
-			return Properties.isRowMatch ? 
+			return Player.Instance.IsRowMatch ? 
 				groupData ? item.Row : item.Column : 
 				groupData ? item.Column : item.Row;
 		}

@@ -37,7 +37,7 @@ namespace Game.UI.Buttons {
             UIManager.HitButton = this;
             UIManager.State = GameState.SelectionStarted;
 
-            Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.PressedGreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
         }
 
@@ -52,10 +52,10 @@ namespace Game.UI.Buttons {
         public void Released(Vector3 pos) {
             if (!_isSelected) return;
 
-            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.GreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
-            UIManager.LevelsPopup.Popup();
+            UIManager.LevelsPopup.Popup(false);
 
             UIManager.State = GameState.None;
             _isSelected = false;
@@ -64,7 +64,7 @@ namespace Game.UI.Buttons {
         public void Canceled(Vector3 pos) {
             if (!_isSelected) return;
 
-            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.GreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
             UIManager.State = GameState.None;

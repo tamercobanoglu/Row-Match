@@ -4,6 +4,7 @@ using Settings;
 using Game.Gameplay.Level;
 using DG.Tweening;
 using TMPro;
+using PlayerInfo;
 
 namespace Game.UI.Gameplay {
     public class GameplayInfo : MonoBehaviour {
@@ -26,7 +27,7 @@ namespace Game.UI.Gameplay {
 
         public void Initialize(int[] scores, int currentLevel, LevelInfo[] levels) {
             _instructionDuration = 2f;
-            _instructionText = Properties.isRowMatch ? RowsInstruction : ColumnsInstruction;
+            _instructionText = Player.Instance.IsRowMatch ? RowsInstruction : ColumnsInstruction;
 
             HighestScoreText.text = scores[currentLevel - 1].ToString();
             MoveCountText.text = levels[currentLevel - 1].MoveCount.ToString();

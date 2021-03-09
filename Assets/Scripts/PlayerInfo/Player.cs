@@ -12,6 +12,7 @@ namespace PlayerInfo {
 		[HideInInspector] public int CurrentLevel;
 		[HideInInspector] public bool HighestScoreAchieved;
 		[HideInInspector] public bool OldLevelRecord;
+		[HideInInspector] public bool IsRowMatch;
 
 		private int _levelCount;
 
@@ -24,7 +25,6 @@ namespace PlayerInfo {
 				Destroy(this);
 			}
 
-			CurrentLevel = 1;
 			_levelCount = levelCount;
 
 			if (!LoadPlayer()) {
@@ -35,7 +35,7 @@ namespace PlayerInfo {
 			return false;
 		}
 
-		public void SavePlayer() {
+		private void SavePlayer() {
 			SaveSystem.SavePlayer(this);
 		}
 
@@ -45,6 +45,8 @@ namespace PlayerInfo {
 			if (data != null) {
 				UnlockedLevels = data.UnlockedLevels;
 				Scores = data.Scores;
+				CurrentLevel = data.CurrentLevel;
+				IsRowMatch = data.IsRowMatch;
 
 				return true;
 			}
@@ -55,6 +57,8 @@ namespace PlayerInfo {
 		private void CreatePlayer() {
 			UnlockedLevels = new bool[_levelCount];
 			UnlockedLevels[0] = true;
+			CurrentLevel = 1;
+			IsRowMatch = true;
 
 			for (int i = 1; i < UnlockedLevels.Length; i++) {
 				UnlockedLevels[i] = false;
@@ -88,6 +92,12 @@ namespace PlayerInfo {
 			}
 
 			HighestScoreAchieved = false;
+			SavePlayer();
+		}
+
+		public void UpdatePlayer(bool isRowMatch) {
+			IsRowMatch = isRowMatch;
+			SavePlayer();
 		}
 	}
 }

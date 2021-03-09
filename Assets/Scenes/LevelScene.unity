@@ -1402,6 +1402,7 @@ MonoBehaviour:
   ScreenManager: {fileID: 519420030}
   FadeRenderer: {fileID: 1582693966}
   LevelInfoPack: {fileID: 11400000, guid: 4f16728d21da0214db004e0e7d2e6f63, type: 2}
+  Skin: {fileID: 11400000, guid: 6c81049acbb83214a9c55f5eb8a62682, type: 2}
   ScoreManager: {fileID: 1145547082}
   ChoicePanel: {fileID: 848321633}
   ReturnButton: {fileID: 397667151}
@@ -1706,7 +1707,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameBoard: {fileID: 1034765219}
-  Skin: {fileID: 11400000, guid: 6c81049acbb83214a9c55f5eb8a62682, type: 2}
 --- !u!1 &988220929
 GameObject:
   m_ObjectHideFlags: 0

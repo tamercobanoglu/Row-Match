@@ -11,17 +11,14 @@ namespace Settings {
         };
 
         /// for levels button and play buttons
-        public static readonly Color32 ButtonColor = new Color32(109, 168, 80, 255);
-        public static readonly Color32 LockedButtonColor = new Color32(140, 140, 140, 255);
-        public static readonly Color32 PressedButtonColor = new Color32(76, 121, 53, 255);
+        public static readonly Color32 GreenButtonColor = new Color32(109, 168, 80, 255);
+        public static readonly Color32 LockedGreenButtonColor = new Color32(140, 140, 140, 255);
+        public static readonly Color32 PressedGreenButtonColor = new Color32(76, 121, 53, 255);
 
-        /// for choice panel buttons
-        public static readonly Color32 ChoiceButtonColor = new Color32(159, 95, 0, 255);
-        public static readonly Color32 PressedChoiceButtonColor = new Color32(111, 66, 2, 255);
+        /// for choice panel buttons and match type button
+        public static readonly Color32 OrangeButtonColor = new Color32(159, 95, 0, 255);
+        public static readonly Color32 PressedOrangeButtonColor = new Color32(111, 66, 2, 255);
 
         public static readonly int FirstInstallAvailableLevels = 10;
-
-        /// temp
-        public static bool isRowMatch = false;
     }
 }

@@ -10,6 +10,7 @@ namespace Game.UI {
         public ScreenManager ScreenManager;
         public SpriteRenderer FadeRenderer;
         public LevelInfoPack LevelInfoPack;
+        public Skin Skin;
 
         protected abstract void Awake();
 

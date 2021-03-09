@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Settings;
 using PlayerInfo;
 using DG.Tweening;
 
@@ -9,7 +8,6 @@ namespace Game.UI.Menu.Popup {
 		public LevelsPanel LevelsPanel;
 		public GameObject LevelCardPrefab;
 		public Transform Transform;
-		public Skin Skin;
 
 		private UIMenu _uiManager;
 		private float _animDuration;
@@ -32,27 +30,29 @@ namespace Game.UI.Menu.Popup {
 				newLevelCardGo.transform.localPosition = new Vector3(0, -2.25f * i, 0);
 
 				var newLevelCard = newLevelCardGo.GetComponent<LevelCard>();
-				newLevelCard.Prepare(_uiManager, _uiManager.LevelInfoPack.Levels[i], Skin, unlockedLevels, scores);
+				newLevelCard.Prepare(_uiManager, _uiManager.LevelInfoPack.Levels[i], _uiManager.Skin, unlockedLevels, scores);
 
 				_levelCards[i] = newLevelCard;
 			}
 		}
 
-		public void Popup() {
-			Transform.localScale = Vector3.one * 0.9f;
+		public void Popup(bool isAnimating) {
+			if (!isAnimating) 
+				LevelsPanel.SetPosition(Player.Instance.CurrentLevel - 1);
+
 			gameObject.SetActive(true);
 			Transform.DOScale(Vector3.one, _animDuration);
 		}
 
 		public void Disappear() {
-			Transform.DOScale(Vector3.one * 0.8f, _animDuration);
+			Transform.localScale = Vector3.one * 0.9f;
 			gameObject.SetActive(false);
 
 			LevelsPanel.ResetPanelPos();
 		}
 
 		public IEnumerator Animate(int levelIndex) {
-			Popup();
+			Popup(true);
 			yield return new WaitForSeconds(_animDuration);
 			LevelsPanel.SelfSlide(levelIndex);
 			yield return new WaitForSeconds(LevelsPanel.SlidingDuration);

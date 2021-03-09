@@ -152,7 +152,15 @@ namespace Game.UI.Menu.Popup {
 		}
 
 		public void SelfSlide(int levelIndex) {
-			LevelsParent.DOLocalMoveY(CalculateSelfSlidingPosY(levelIndex), SlidingDuration);
+			LevelsParent.DOLocalMoveY(CalculateCurrentLevelPosY(levelIndex), SlidingDuration);
+		}
+
+		public void SetPosition(int levelIndex) {
+			LevelsParent.transform.localPosition = new Vector3(
+				LevelsParent.transform.localPosition.x,
+				CalculateCurrentLevelPosY(levelIndex),
+				LevelsParent.transform.localPosition.z
+			);
 		}
 
 		#region Calculations
@@ -169,7 +177,7 @@ namespace Game.UI.Menu.Popup {
 			return _basePosY + distance;
 		}
 
-		private float CalculateSelfSlidingPosY(int levelIndex) {
+		private float CalculateCurrentLevelPosY(int levelIndex) {
 			var localBasePosY = _basePosY + 0.5f;
 			var localTopPosY = _topPosY + 0.5f;
 			var levelCardMargin = 2.25f;

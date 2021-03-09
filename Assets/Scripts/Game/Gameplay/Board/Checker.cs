@@ -4,8 +4,8 @@ using PlayerInfo;
 
 namespace Game.Gameplay.Board {
 	public class Checker {
-		public float YPos { get { return _pos; } }
-		public float BaseXPos { get { return _basePos; } }
+		public float Pos { get { return _pos; } }
+		public float BasePos { get { return _basePos; } }
 
 		public Item.Item[] Items = null;
 		public float MatchDuration;
@@ -36,7 +36,7 @@ namespace Game.Gameplay.Board {
 
 		/// for vertically swapped ones
 		public bool UpdateData(Item.Item item, ScoreManager sm) {
-			Items[Properties.isRowMatch ? item.Column : item.Row] = item;
+			Items[Player.Instance.IsRowMatch ? item.Column : item.Row] = item;
 
 			if (!IsCompleted()) 
 				return false;

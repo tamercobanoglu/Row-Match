@@ -38,7 +38,7 @@ namespace Game.UI.Buttons {
         }
 
         private void Unlock() {
-            Image.color = Properties.ButtonColor;
+            Image.color = Properties.GreenButtonColor;
             Text.enabled = true;
             BoxCollider2D.enabled = true;
 
@@ -48,7 +48,7 @@ namespace Game.UI.Buttons {
         }
 
         public void LockTemp() {
-            Image.color = Properties.LockedButtonColor;
+            Image.color = Properties.LockedGreenButtonColor;
             Text.enabled = false;
             BoxCollider2D.enabled = false;
 
@@ -83,7 +83,7 @@ namespace Game.UI.Buttons {
             var seq = DOTween.Sequence();
             seq.Append(Icon.transform.DOScale(Vector3.one * 0.01f, 0.5f))
                 .Append(Text.transform.DOScale(Vector3.one, 0.25f))
-                .Append(Image.DOColor(Properties.ButtonColor, 0.5f));
+                .Append(Image.DOColor(Properties.GreenButtonColor, 0.5f));
         }
 
         private void Activate() {
@@ -118,7 +118,7 @@ namespace Game.UI.Buttons {
             _uiManager.HitButton = this;
             _uiManager.State = GameState.SelectionStarted;
 
-            Image.DOColor(Properties.PressedButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.PressedGreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one * 0.95f, Properties.ButtonAnimDuration);
         }
 
@@ -144,7 +144,7 @@ namespace Game.UI.Buttons {
         public void Released(Vector3 pos) {
             if (!_isSelected) return;
 
-            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.GreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
             Player.Instance.CurrentLevel = _levelNum;
@@ -157,7 +157,7 @@ namespace Game.UI.Buttons {
         public void Canceled(Vector3 pos) {
             if (!_isSelected) return;
 
-            Image.DOColor(Properties.ButtonColor, Properties.ButtonAnimDuration);
+            Image.DOColor(Properties.GreenButtonColor, Properties.ButtonAnimDuration);
             transform.DOScale(Vector3.one, Properties.ButtonAnimDuration);
 
             _uiManager.State = GameState.None;
