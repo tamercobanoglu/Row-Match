@@ -7,16 +7,15 @@ using Utils;
 using Settings;
 using PlayerInfo;
 using DG.Tweening;
+using System.Linq;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {
 		public UIGameplay UIManager;
-		public ScoreManager ScoreManager;
 		public SpriteRenderer BoardRenderer;
 		public Transform ItemsParent;
 
-		[HideInInspector] public Checker[] Checkers = null;
-		[HideInInspector] public Checker[] Rows = null;
+		public Cell[,] Cells;
 		[HideInInspector] public Item.Item HitItem = null;
 
 		private int _width;
@@ -30,54 +29,22 @@ namespace Game.Gameplay.Board {
 
 			BoardRenderer.size = new Vector2(_width + 0.2f, _height + 0.2f);
 
-			CreateCheckers();
-			CreateRows();
+			CreateCells();
 		}
 
-		private void CreateCheckers() {
+		private void CreateCells() {
 			var baseYPos = -(float)_height / 2 + 0.5f;
 			var baseXPos = -(float)_width / 2 + 0.5f;
 
-			int checkerCount, itemCount;
-			float pos, basePos;
+			Cells = new Cell[_height, _width];
 
-			#region arrange parameters
-			if (Player.Instance.IsRowMatch) {
-				checkerCount = _height;
-				itemCount = _width;
-				pos = baseYPos;
-				basePos = baseXPos;
-			}
-
-			else {
-				checkerCount = _width;
-				itemCount = _height;
-				pos = baseXPos;
-				basePos = baseYPos;
-			}
-			#endregion
-
-			Checkers = new Checker[checkerCount];
-
-			for (int i = 0; i < checkerCount; i++) {
-				var checker = new Checker();
-				checker.Prepare(pos + i, basePos, itemCount, _matchSprite);
-
-				Checkers[i] = checker;
-			}
-		}
-
-		private void CreateRows() {
-			var baseYPos = -(float)_height / 2 + 0.5f;
-			var baseXPos = -(float)_width / 2 + 0.5f;
-
-			Rows = new Checker[_height];
+			ItemsParent.localPosition = new Vector3(baseXPos, baseYPos, 0);
 
 			for (int i = 0; i < _height; i++) {
-				var row = new Checker();
-				row.Prepare(baseYPos + i, baseXPos, _width, _matchSprite);
-
-				Rows[i] = row;
+				for (int j = 0; j < _width; j++) {
+					var cell = new Cell();
+					Cells[i, j] = cell;
+				}
 			}
 		}
 
@@ -104,12 +71,12 @@ namespace Game.Gameplay.Board {
 			SwapItems(HitItem, item);
 			yield return new WaitForSeconds(Properties.ItemSwapDuration);
 
-			ScoreManager.UpdateMoveCount();
+			UIManager.ScoreManager.UpdateMoveCount();
 			/// check out the needed rows
 			yield return StartCoroutine(UpdateData(HitItem, item));
 
 			/// check move count
-			ScoreManager.MoveSpent();
+			UIManager.ScoreManager.MoveSpent();
 
 			UIManager.State = GameState.None;
 		}
@@ -125,31 +92,86 @@ namespace Game.Gameplay.Board {
 		}
 
 		IEnumerator UpdateData(Item.Item hitItem, Item.Item item) {
-			/// items swapped in the same row or opposite
-			if (GetData(hitItem, true) == GetData(item, true)) {
-				Checkers[GetData(item, true)].UpdateData(GetData(hitItem, false), GetData(item, false));
+			/// no need to check if any match occurs
+			if (GetData(hitItem) == GetData(item)) {
+				SwapData(hitItem, item);
 				yield break;
 			}
 
-			/// items swapped in the same column or opposite
-			if (Checkers[GetData(hitItem, true)].UpdateData(hitItem, ScoreManager)) {
-				yield return new WaitForSeconds(Checkers[GetData(hitItem, true)].MatchDuration);
+			var itemCount = Player.Instance.IsRowMatch ? _width : _height;
+
+			/// need to check if any match occurs
+			if (SwapData(hitItem)) {
+				yield return new WaitForSeconds(hitItem.MatchDuration * itemCount);
 			}
 
-			if (Checkers[GetData(item, true)].UpdateData(item, ScoreManager)) {
-				yield return new WaitForSeconds(Checkers[GetData(item, true)].MatchDuration);
+			if (SwapData(item)) {
+				yield return new WaitForSeconds(item.MatchDuration * itemCount);
+			}
+
+			yield return new WaitForSeconds(0.1f);
+		}
+
+		#region Checker Methods
+		/// for swaps that do not need to be checked if any match occurs
+		public void SwapData(Item.Item item1, Item.Item item2) {
+			var temp = Cells[item1.Row, item1.Column];
+			Cells[item1.Row, item1.Column] = Cells[item2.Row, item2.Column];
+			Cells[item2.Row, item2.Column] = temp;
+		}
+
+		/// for swaps that need to be checked if any match occurs
+		public bool SwapData(Item.Item item) {
+			Cells[item.Row, item.Column].Item = item;
+			var subCells = Cells.SliceArray(GetData(item)).ToArray();
+
+			if (!IsCompleted(subCells))
+				return false;
+
+			Match(subCells);
+			return true;
+		}
+
+		private bool IsCompleted(Cell[] cells) {
+			for (int i = 1; i < cells.Length; i++) {
+				if (cells[i].Item.ItemType != cells[0].Item.ItemType) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private void Match(Cell[] cells) {
+			StartCoroutine(MatchingProcess(cells, Properties.PointsArray[(int)cells[0].Item.ItemType - 1], cells[0].Item.MatchDuration, _matchSprite));
+		}
+
+		IEnumerator MatchingProcess(Cell[] cells, int pointPerItem, float itemMatchDuration, Sprite matchSprite) {
+			System.Random rnd = new System.Random();
+			var direction = rnd.Next(2);
+
+			for (int i = 0; i < cells.Length; i++) {
+				var j = direction == 0 ? i : cells.Length - i - 1;
+
+				cells[j].Disable();
+				cells[j].Item.Animate(itemMatchDuration);
+				yield return new WaitForSeconds(itemMatchDuration);
+
+				cells[j].Item.Complete(matchSprite);
+				UIManager.ScoreManager.UpdateScoreText(pointPerItem);
 			}
 		}
+		#endregion
 
-		private int GetData(Item.Item item, bool groupData) {
-			return Player.Instance.IsRowMatch ? 
-				groupData ? item.Row : item.Column : 
-				groupData ? item.Column : item.Row;
+		private int GetData(Item.Item item) {
+			return Player.Instance.IsRowMatch ? item.Row : item.Column;
 		}
 
-		public void DisableCheckers() {
-			for (int i = 0; i < Checkers.Length; i++) {
-				Checkers[i].Disable();
+		public void DisableCells() {
+			for (int i = 0; i < _height; i++) {
+				for (int j = 0; j < _width; j++) {
+					Cells[i, j].Disable();
+				}
 			}
 		}
 	}

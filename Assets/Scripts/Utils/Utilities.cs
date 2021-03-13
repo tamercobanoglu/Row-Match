@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Game.Gameplay.Item;
+using System.Collections.Generic;
+using Game.Gameplay.Board;
 
 namespace Utils {
     public static class Utilities {
@@ -24,6 +26,20 @@ namespace Utils {
             temp = a.Column;
             a.Column = b.Column;
             b.Column = temp;
+        }
+
+        public static IEnumerable<T> SliceArray<T>(this T[,] array, int index) {
+            if (PlayerInfo.Player.Instance.IsRowMatch) {
+                for (int i = 0; i < array.GetLength(1); i++) {
+                    yield return array[index, i];
+                }
+            }
+
+            else {
+                for (int i = 0; i < array.GetLength(0); i++) {
+                    yield return array[i, index];
+                }
+            }
         }
     }
 }

@@ -10,10 +10,10 @@ namespace Game.Gameplay.Item {
 		public int Column;
 
 		private ItemType _itemType;
+		private float _matchDuration;
 
-		public ItemType ItemType {
-			get { return _itemType; }
-		}
+		public ItemType ItemType { get { return _itemType; } }
+		public float MatchDuration { get { return _matchDuration; } }
 
 		public void Prepare(ItemType itemType, ItemBase itembase, Sprite sprite, int row, int col) {
 			SpriteRenderer = itembase.SpriteRenderer;
@@ -25,6 +25,7 @@ namespace Game.Gameplay.Item {
 			Row = row;
 			Column = col;
 			_itemType = itemType;
+			_matchDuration = 0.1f;
 		}
 
 		public void Animate(float itemMatchDuration) {

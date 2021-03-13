@@ -48,7 +48,7 @@ namespace Game.UI {
         }
 
         IEnumerator EndingProcess() {
-            LevelManager.GameBoard.DisableCheckers();
+            LevelManager.GameBoard.DisableCells();
             yield return new WaitForSeconds(0.3f);
 
             OutcomePanel.Display();
