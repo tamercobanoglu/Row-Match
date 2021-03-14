@@ -41,17 +41,17 @@ namespace Game.UI {
             Fade(FadeType.In);
         }
 
-        public void EndGame(int score) {
+        public void EndGame(int score, GameOutcome gameOutcome) {
             UpdatePlayer(score);
 
-            StartCoroutine(EndingProcess());
+            StartCoroutine(EndingProcess(gameOutcome));
         }
 
-        IEnumerator EndingProcess() {
+        IEnumerator EndingProcess(GameOutcome gameOutcome) {
             LevelManager.GameBoard.DisableCells();
             yield return new WaitForSeconds(0.3f);
 
-            OutcomePanel.Display();
+            OutcomePanel.Display(gameOutcome);
             yield return new WaitForSeconds(1.6f);
 
             OutcomePanel.ReturnButton.PopupText();

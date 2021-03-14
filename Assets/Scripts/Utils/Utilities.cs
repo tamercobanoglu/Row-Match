@@ -41,6 +41,24 @@ namespace Utils {
                 }
             }
         }
+
+        public static T[] AppendToArray<T>(T[] arrayToResize, T[] elemenstArray) {
+            int arrayLength = arrayToResize.Length + elemenstArray.Length;
+            T[] resizedArray = new T[arrayLength];
+
+			for (int i = 0; i < arrayToResize.Length; i++) {
+                resizedArray[i] = arrayToResize[i];
+			}
+
+            int counter = 0;
+
+			for (int i = arrayToResize.Length; i < arrayLength; i++) {
+                resizedArray[i] = elemenstArray[counter];
+                counter++;
+			}
+
+            return resizedArray;
+        }
     }
 }
 

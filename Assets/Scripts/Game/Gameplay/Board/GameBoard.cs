@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Game.UI;
 using Game.Mechanics;
+using Game.UI.Gameplay;
+using Game.Gameplay.Item;
 using Game.Gameplay.Level;
 using Utils;
 using Settings;
 using PlayerInfo;
 using DG.Tweening;
-using System.Linq;
 
 namespace Game.Gameplay.Board {
 	public class GameBoard : MonoBehaviour {
@@ -21,11 +24,13 @@ namespace Game.Gameplay.Board {
 		private int _width;
 		private int _height;
 		private Sprite _matchSprite;
+		private List<int> _borderIndexList;
 
 		public void Prepare(LevelInfo levelInfo, Sprite matchSprite) {
 			_width = levelInfo.GridWidth;
 			_height = levelInfo.GridHeight;
 			_matchSprite = matchSprite;
+			_borderIndexList = new List<int>() { -1, Player.Instance.IsRowMatch ? _height : _width };
 
 			BoardRenderer.size = new Vector2(_width + 0.2f, _height + 0.2f);
 
@@ -76,7 +81,7 @@ namespace Game.Gameplay.Board {
 			yield return StartCoroutine(UpdateData(HitItem, item));
 
 			/// check move count
-			UIManager.ScoreManager.MoveSpent();
+			MoveSpent();
 
 			UIManager.State = GameState.None;
 		}
@@ -112,22 +117,94 @@ namespace Game.Gameplay.Board {
 			yield return new WaitForSeconds(0.1f);
 		}
 
-		#region Checker Methods
+		private void MoveSpent() {
+			if (!RemainingMatchableItems() && UIManager.ScoreManager.MoveCount != 0) {
+				UIManager.EndGame(UIManager.ScoreManager.Score, GameOutcome.NonMatchableItems);
+				return;
+			}
+
+			UIManager.ScoreManager.MoveSpent();
+		}
+
+		#region Move Checker Methods
+		private bool RemainingMatchableItems() {
+			var subCellsList = new List<Cell[]>();
+
+			/// create subCells list
+			for (int i = 0; i < _borderIndexList.Count - 1; i++) {
+				var subCells = CreateSubCells(_borderIndexList[i], _borderIndexList[i + 1]);
+
+				if (subCells != null) {
+					subCellsList.Add(subCells);
+				}
+			}
+
+			/// check for each subCells
+			for (int i = 0; i < subCellsList.Count; i++) {
+				if (CheckSubCells(subCellsList[i])) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void AddBorderIndex(int index) {
+			_borderIndexList.Add(index);
+			_borderIndexList.Sort();
+		}
+
+		private Cell[] CreateSubCells(int lowerBorder, int upperBorder) {
+			if (upperBorder - lowerBorder < 3) {
+				return null;
+			}
+
+			var subCells = new Cell[0];
+
+			for (int i = lowerBorder + 1; i < upperBorder; i++) {
+				var cellsToAppend = Cells.SliceArray(i).ToArray();
+				subCells = Utilities.AppendToArray(subCells, cellsToAppend);
+			}
+
+			return subCells;
+		}
+
+		private bool CheckSubCells(Cell[] subCells) {
+			var enoughRedItem = CheckItemCount(subCells, ItemType.Red);
+			var enoughGreenItem = CheckItemCount(subCells, ItemType.Green);
+			var enoughBlueItem = CheckItemCount(subCells, ItemType.Blue);
+			var enoughYellowItem = CheckItemCount(subCells, ItemType.Yellow);
+
+			return enoughRedItem || enoughGreenItem
+				|| enoughBlueItem || enoughYellowItem;
+		}
+
+		private bool CheckItemCount(Cell[] subCells, ItemType itemType) {
+			var items = from cell in subCells
+						where cell.Item.ItemType == itemType
+						select cell.Item;
+
+			return items.ToArray().Length >= (Player.Instance.IsRowMatch ? _width : _height);
+		}
+		#endregion
+
+		#region Match Checker Methods
 		/// for swaps that do not need to be checked if any match occurs
-		public void SwapData(Item.Item item1, Item.Item item2) {
+		private void SwapData(Item.Item item1, Item.Item item2) {
 			var temp = Cells[item1.Row, item1.Column];
 			Cells[item1.Row, item1.Column] = Cells[item2.Row, item2.Column];
 			Cells[item2.Row, item2.Column] = temp;
 		}
 
 		/// for swaps that need to be checked if any match occurs
-		public bool SwapData(Item.Item item) {
+		private bool SwapData(Item.Item item) {
 			Cells[item.Row, item.Column].Item = item;
 			var subCells = Cells.SliceArray(GetData(item)).ToArray();
 
 			if (!IsCompleted(subCells))
 				return false;
 
+			AddBorderIndex(GetData(item));
 			Match(subCells);
 			return true;
 		}

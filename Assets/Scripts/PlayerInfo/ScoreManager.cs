@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Game.UI;
-using Game.Gameplay.Item;
+using Game.UI.Gameplay;
 
 namespace PlayerInfo {
     public class ScoreManager : MonoBehaviour {
@@ -9,6 +8,9 @@ namespace PlayerInfo {
 
         private int _score;
         private int _moveCount;
+
+        public int Score { get { return _score; } }
+        public int MoveCount { get { return _moveCount; } }
 
         public void Initialize(UIGameplay uiManager, int moveCount) {
             _uiManager = uiManager;
@@ -19,7 +21,7 @@ namespace PlayerInfo {
 
         public void MoveSpent() {
 			if (_moveCount < 1) {
-                _uiManager.EndGame(_score);
+                _uiManager.EndGame(_score, GameOutcome.OutOfMoves);
 			}
         }
 
