@@ -121,7 +121,7 @@ namespace Game.UI.Menu.Popup {
 
 				LevelsParent.position = pos;
 
-				yield return new WaitForFixedUpdate();
+				yield return null;
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace Game.UI.Menu.Popup {
 				}
 
 				LevelsParent.position = pos;
-				yield return new WaitForFixedUpdate();
+				yield return null;
 			}
 		}
 

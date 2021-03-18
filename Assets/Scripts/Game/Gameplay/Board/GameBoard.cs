@@ -53,9 +53,11 @@ namespace Game.Gameplay.Board {
 			}
 		}
 
-		public void ItemTapped(Item.Item item) {
+		public void SelectItem(Item.Item item) {
 			HitItem = item;
 			UIManager.State = GameState.SelectionStarted;
+
+			item.Light(1.5f);
 		}
 
 		public void SwapAttempt(Item.Item item) {
@@ -71,6 +73,25 @@ namespace Game.Gameplay.Board {
 			StartCoroutine(Swap(item));
 		}
 
+		public void ReleaseItem(bool instant) {
+			if (HitItem == null) {
+				Debug.Log($"Hit item is null");
+				return;
+			}
+
+			if (instant) {
+				HitItem.Light(1f);
+			}
+
+			HitItem = null;
+			UIManager.State = GameState.None;
+		}
+
+		public void JiggleItem(Vector3 pos) {
+			HitItem.Jiggle(GetDirection(pos));
+			ReleaseItem(true);
+		}
+
 		private IEnumerator Swap(Item.Item item) {
 			/// move the swapped ones
 			SwapItems(HitItem, item);
@@ -79,6 +100,7 @@ namespace Game.Gameplay.Board {
 			UIManager.ScoreManager.UpdateMoveCount();
 			/// check out the needed rows
 			yield return StartCoroutine(UpdateData(HitItem, item));
+			ReleaseItem(false);
 
 			/// check move count
 			MoveSpent();
@@ -94,6 +116,8 @@ namespace Game.Gameplay.Board {
 
 			hitItem.transform.DOMove(itemPos, Properties.ItemSwapDuration);
 			item.transform.DOMove(hitItemPos, Properties.ItemSwapDuration);
+
+			HitItem.Light(1f);
 		}
 
 		IEnumerator UpdateData(Item.Item hitItem, Item.Item item) {
@@ -237,6 +261,29 @@ namespace Game.Gameplay.Board {
 				cells[j].Item.Complete(matchSprite);
 				UIManager.ScoreManager.UpdateScoreText(pointPerItem);
 			}
+		}
+		#endregion
+
+		#region Jiggling Methods
+		private Direction GetDirection(Vector3 pos) {
+			float halfUnit = 0.5f;
+			var refPos = HitItem.transform.position;
+
+			if (pos.x > refPos.x - halfUnit && pos.x < refPos.x + halfUnit) {
+				if (pos.y > refPos.y + halfUnit) {
+					return Direction.Up;
+				}
+				else return Direction.Down;
+			}
+
+			else if (pos.y > refPos.y - halfUnit && pos.y < refPos.y + halfUnit) {
+				if (pos.x > refPos.x + halfUnit) {
+					return Direction.Right;
+				}
+				else return Direction.Left;
+			}
+
+			return Direction.None;
 		}
 		#endregion
 

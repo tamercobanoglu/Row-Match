@@ -81,7 +81,6 @@ namespace Game.UI {
         /// when the choice panel is activated / deactivated
         public void RearButtonsActivation(bool isActive) {
             GameStopped = !isActive;
-
             ReturnButton.Collider.enabled = isActive;
         }
     }

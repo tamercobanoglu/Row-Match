@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using Game.Gameplay.Board;
 using DG.Tweening;
 
 namespace Game.Gameplay.Item {
 	public class Item : MonoBehaviour {
+		private const string Glow = "_Glow";
+
 		public SpriteRenderer SpriteRenderer;
 		public BoxCollider2D BoxCollider2D;
 
@@ -36,6 +39,32 @@ namespace Game.Gameplay.Item {
 			SpriteRenderer.sprite = matchSprite;
 			SpriteRenderer.size = Vector2.one * 0.9f;
 			BoxCollider2D.enabled = false;
+		}
+
+		public void Light(float intensity) {
+			SpriteRenderer.material.SetFloat(Glow, intensity);
+		}
+
+		public void Jiggle(Direction dir) {
+			StopAllCoroutines();
+			Vector3 refPos = transform.position;
+			var seq = DOTween.Sequence();
+
+			if (dir == Direction.Up || dir == Direction.Down) {
+				float diff = dir == Direction.Up ? 0.15f : -0.15f;
+
+				seq.Append(transform.DOMoveY(refPos.y + diff, _matchDuration))
+				.Append(transform.DOMoveY(refPos.y - diff, _matchDuration))
+				.Append(transform.DOMoveY(refPos.y, _matchDuration / 2f));
+			}
+
+			else if (dir == Direction.Right || dir == Direction.Left) {
+				float diff = dir == Direction.Right ? 0.15f : -0.15f;
+
+				seq.Append(transform.DOMoveX(refPos.x + diff, _matchDuration))
+				.Append(transform.DOMoveX(refPos.x - diff, _matchDuration))
+				.Append(transform.DOMoveX(refPos.x, _matchDuration / 2f));
+			}
 		}
 	}
 }

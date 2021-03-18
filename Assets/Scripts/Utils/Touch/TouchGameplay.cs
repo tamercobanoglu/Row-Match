@@ -64,7 +64,7 @@ namespace Utils.Touch {
             if (hit != null && !hit.CompareTag(BackgroundTag)) {
                 if (hit.CompareTag(ItemTag)) {
 					if (!UIManager.GameStopped) {
-                        UIManager.LevelManager.GameBoard.ItemTapped(hit.gameObject.GetComponent<Item>());
+                        UIManager.LevelManager.GameBoard.SelectItem(hit.gameObject.GetComponent<Item>());
                     }
                 }
 
@@ -81,21 +81,24 @@ namespace Utils.Touch {
             if (hit != null) {
 				if (UIManager.HitButton == null) {
 					if (UIManager.LevelManager.GameBoard.HitItem.gameObject != hit.gameObject 
-                        && !UIManager.GameStopped
-                        && hit.CompareTag(ItemTag)) {
-                        UIManager.LevelManager.GameBoard.SwapAttempt(hit.gameObject.GetComponent<Item>());
+                        && !UIManager.GameStopped) {
+                        if (hit.CompareTag(ItemTag)) {
+                            UIManager.LevelManager.GameBoard.SwapAttempt(hit.gameObject.GetComponent<Item>());
+                        }
+
+                        else {
+                            UIManager.LevelManager.GameBoard.JiggleItem(worldPoint);
+                        }
                     }
 				}
 
                 else {
-                    var button = hit.gameObject.GetComponent<IButton>();
-
                     if (((MonoBehaviour)UIManager.HitButton).gameObject != hit.gameObject) {
                         UIManager.HitButton.Operate(worldPoint, TouchPhase.Canceled);
                     }
 
                     else {
-                        button.Operate(worldPoint, TouchPhase.Moved);
+                        hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Moved);
                     }
                 }
             }
@@ -105,10 +108,15 @@ namespace Utils.Touch {
             var worldPoint = Camera.ScreenToWorldPoint(pos);
             var hit = Physics2D.OverlapPoint(worldPoint) as BoxCollider2D;
 
-            if (hit != null 
-                && !hit.CompareTag(ItemTag)
-                && !hit.CompareTag(BackgroundTag)) {
-                hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Ended);
+            if (hit != null) {
+                if (hit.CompareTag(ItemTag) 
+                    || hit.CompareTag(BackgroundTag)) {
+                    UIManager.LevelManager.GameBoard.ReleaseItem(true);
+                }
+
+                else if(hit.gameObject.GetComponent<IButton>() != null) {
+                    hit.gameObject.GetComponent<IButton>().Operate(worldPoint, TouchPhase.Ended);
+                }
             }
         }
     }
